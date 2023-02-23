@@ -45,11 +45,12 @@ class HostStaff(admin.ModelAdmin):
     
 admin.site.register(Staff, HostStaff)
 
+
 class HostActivities(admin.ModelAdmin):
-    list_display =  ('title', 'startTime', 'endTime', 'created')
+    list_display = ['title', 'ETA', 'startTime', 'endTime', 'created']
 
-admin.site.register(Activities,HostActivities)
 
+admin.site.register(Activities, HostActivities)
 
 class HostPOA(admin.ModelAdmin):
     list_display = ('activityId', 'Engineers','poaDetails', 'poaEntry')
@@ -61,6 +62,12 @@ admin.site.register(Poa,HostPOA)
 
 
 class HostEmailNotification(admin.ModelAdmin):
-    list_display = ['activityId', 'email', 'sendStatus', 'logTime']
+    list_display = ['activityId', 'email', 'sendStatus', 'sendTo', 'logTime']
     
 admin.site.register(EmailNotification, HostEmailNotification)
+
+
+class HostActivityTable(admin.ModelAdmin):
+    list_display = ['actId','comment', 'commentBy', 'timeStamp']
+    
+admin.site.register(ActivityTable, HostActivityTable)

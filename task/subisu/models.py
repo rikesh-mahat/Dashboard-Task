@@ -1,10 +1,15 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 from django.core.exceptions import ValidationError
-
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 # this is my mobile validation function
 def mobile_no_length(number):
+    try:
+        number  = int(number)
+    except:
+        raise ValidationError("Sorry the number cannot contaain any symbols or alphabets")
     if len(str(number)) != 10:
         raise ValidationError("Mobile Number digits should be exactly 10")
 
@@ -110,33 +115,50 @@ class Staff(models.Model):
         return self.firstName + " "+ self.middleName +  " " +self.lastName
 
 
-    
+ACTIVITY_STATUS = [
+    ('Pending', 'Pending'),
+    ('Open' , 'Open'),
+    ('Close', 'Close'),
+    ('In Progress', 'In Progress')
+]    
     
 class Activities(models.Model):
-
     title = models.CharField(max_length=200, verbose_name="Activity Title")
-    startTime = models.DateTimeField(auto_now_add=True, verbose_name="Activity Start Time")
+    startTime = models.DateTimeField(auto_now=False, verbose_name="Activity Start Time")
     ETA = models.CharField(max_length=200)
-    endTime = models.DateTimeField(auto_now=True, verbose_name="Activity End Time")
+    endTime = models.DateTimeField(auto_now=False, verbose_name="Activity End Time")
     activities = models.TextField(max_length=500, verbose_name="Activities")
     created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
-    # status = models.IntegerField(choices=ACTIVITY_STATUS, default=ACTIVITY_STATUS[0][1])
-    
-        
-        
-    # def save(self, *args, **kwargs):
-    #     email_list = EmailNotification.objects.filter(activityId = self)
-    #     email_list.update(sendStatus = self.status)
-    #     super(Activities, self).save(*args, **kwargs)  
+    comment = models.TextField(max_length=500, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=ACTIVITY_STATUS, default='Open')
+
+    def save(self, *args, **kwargs):
+        if self.id:
+            title = self.title
+            startTime = self.startTime
+            ETA = self.ETA
+            endTime = self.endTime
+            activities = self.activities
+            createdTime = self.created
+            comment = self.comment
+            tableComment = f"Title : {title} \nStartTime : {startTime} \nETA : {ETA} \nEndTime : {endTime} \nActivities : {activities} \nCreatedAt : {createdTime} \nComment : {comment}"
+            ActivityTable.objects.create(actId = self, comment = tableComment)
+        super(Activities, self).save(*args, **kwargs)  
         
     def __str__(self):
         return self.title
     
-# id /ACTID/COMMENT/COMMENTBY/TIMESTAMP  
-class Activity_Table(models.Model):
-    actId  = models.ForeignKey(Activities, on_delete=models.PROTECT)
-    comment = models.TextField(max_length=500, null=True, blank=True)
-    commentBy = models.CharField(max_length=100)
+
+class ActivityTable(models.Model):
+    actId  = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True, blank=True)
+    comment = models.TextField(max_length=500, null=True, blank=True, editable=False)
+    commentBy = models.CharField(max_length=200, null=True,blank=True,editable=False)
+    timeStamp = models.TimeField(auto_now_add=True, null=True)
+    
+  
+        
+    # def __str__(self):
+    #     return self.actId.title
     
 
 class Poa(models.Model):
@@ -152,20 +174,24 @@ class Poa(models.Model):
     
     
     
-EMAIL_STATUS = [
-    ('Pending', 'Pending'),
-    ('Open' , 'Open'),
-]  
 
+EMAIL_CHOICES = [
+    ('Department', 'Department'),
+    ('Client', 'Client')
+]
 class EmailNotification(models.Model):
 
     activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
     email = models.EmailField(max_length=200, verbose_name="Email")
-    sendStatus = models.CharField(max_length=25, verbose_name="Status",choices=EMAIL_STATUS, default='Open')
+    sendStatus = models.CharField(max_length=25, verbose_name="Status", default='Open')
+    sendTo = models.CharField(max_length=20, choices=EMAIL_CHOICES, default='Department')
+    message = models.TextField(null=True, blank=True)
     logTime = models.TimeField(auto_now_add=True)
     
     # def save(self, *args, **kwargs):
-    #     self.sendStatus = self.activityId.status
+    #     if self.sendStatus == 'In Progress':
+    #         self.sendTo = 'Department'
+    #         self.message = self.activityId.activities
     #     super(EmailNotification, self).save(*args, **kwargs)  
         
     def __str__(self):
