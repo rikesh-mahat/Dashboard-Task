@@ -7,4 +7,4 @@ class SubisuConfig(AppConfig):
     
     
     def ready(self):
-        import subisu.signals
+        import subisu.signals  # singal lai register gareko

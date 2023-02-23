@@ -133,7 +133,7 @@ class Activities(models.Model):
     status = models.CharField(max_length=20, choices=ACTIVITY_STATUS, default='Open')
 
     def save(self, *args, **kwargs):
-        if self.id:
+        if self.id:                           # create gareko cha ki nai check huncha ani save garda feri arko table banaidincha activities table ma save garesi 
             title = self.title
             startTime = self.startTime
             ETA = self.ETA

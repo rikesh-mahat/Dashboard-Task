@@ -3,10 +3,12 @@ from django.dispatch import receiver
 from .models import Activities, ActivityTable
 from django.contrib.auth import get_user_model
 
+
+# signal : kunai acitivity create bhayesi signal aaucha ani hamley activitytable ma tyo comment haru automatically halchum
 @receiver(post_save, sender = Activities)
-def create_comment(sender, instance, created, **kwargs):
+def create_comment(sender, instance, created, **kwargs): # sender  = Activties, instance = Activities, created bhaneko create bhayo ki nai bhanera check garna lai
     if created:
-            title = instance.title
+            title = instance.title                
             startTime = instance.startTime
             ETA = instance.ETA
             endTime = instance.endTime
