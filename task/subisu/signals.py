@@ -16,5 +16,5 @@ def create_comment(sender, instance, created, **kwargs): # sender  = Activties, 
             createdTime = instance.created
             comment = instance.comment
             tableComment = f"Title : {title} \nStartTime : {startTime} \nETA : {ETA} \nEndTime : {endTime} \nActivities : {activities} \nCreatedAt : {createdTime} \nComment : {comment}"
-            ActivityTable.objects.create(actId = instance, comment = tableComment, commentBy = User.objects.filter(is_superuser = True).first().username)
-        
+            ActivityTable.objects.create(actId = instance, comment = tableComment, commentBy = User.objects.filter(is_superuser = True).first().username) # your might be commentedBy
+         

@@ -143,7 +143,7 @@ class Activities(models.Model):
             createdTime = self.created
             comment = self.comment
             tableComment = f"Title : {title} \nStartTime : {startTime} \nETA : {ETA} \nEndTime : {endTime} \nActivities : {activities} \nCreatedAt : {createdTime} \nComment : {comment}"
-            ActivityTable.objects.create(actId = self, comment = tableComment, commentBy = User.objects.filter(is_superuser = True).first().username)
+            ActivityTable.objects.create(actId = self, comment = tableComment, commentBy = User.objects.filter(is_superuser = True).first().username) # for superusername yours might be commentedBy
         super(Activities, self).save(*args, **kwargs)  
         
     def __str__(self):
