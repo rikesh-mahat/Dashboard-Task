@@ -157,8 +157,8 @@ class ActivityTable(models.Model):
     
   
         
-    # def __str__(self):
-    #     return self.actId.title
+    def __str__(self):
+        return self.actId.title
     
 
 class Poa(models.Model):
@@ -183,7 +183,7 @@ class EmailNotification(models.Model):
 
     activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
     email = models.EmailField(max_length=200, verbose_name="Email")
-    sendStatus = models.CharField(max_length=25, verbose_name="Status", default='Open')
+    sendStatus = models.CharField(max_length=25, verbose_name="Status")
     sendTo = models.CharField(max_length=20, choices=EMAIL_CHOICES, default='Department')
     message = models.TextField(null=True, blank=True)
     logTime = models.TimeField(auto_now_add=True)
