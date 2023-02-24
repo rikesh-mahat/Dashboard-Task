@@ -80,3 +80,4 @@ admin.site.register(EmailNotification, HostEmailNotification)
 #     list_display = ['actId','comment', 'commentBy', 'timeStamp']
     
 # admin.site.register(ActivityTable, HostActivityTable)
+

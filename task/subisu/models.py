@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
+
 # this is my mobile validation function
 def mobile_no_length(number):
     try:
@@ -133,7 +133,8 @@ class Activities(models.Model):
     status = models.CharField(max_length=20, choices=ACTIVITY_STATUS, default='Open')
 
     def save(self, *args, **kwargs):
-        if self.id:                           # create gareko cha ki nai check huncha ani save garda feri arko table banaidincha activities table ma save garesi 
+        if self.id:
+            # create gareko cha ki nai check huncha ani save garda feri arko table banaidincha activities table ma save garesi 
             title = self.title
             startTime = self.startTime
             ETA = self.ETA
@@ -142,7 +143,7 @@ class Activities(models.Model):
             createdTime = self.created
             comment = self.comment
             tableComment = f"Title : {title} \nStartTime : {startTime} \nETA : {ETA} \nEndTime : {endTime} \nActivities : {activities} \nCreatedAt : {createdTime} \nComment : {comment}"
-            ActivityTable.objects.create(actId = self, comment = tableComment)
+            ActivityTable.objects.create(actId = self, comment = tableComment, commentBy = User.objects.filter(is_superuser = True).first().username)
         super(Activities, self).save(*args, **kwargs)  
         
     def __str__(self):
