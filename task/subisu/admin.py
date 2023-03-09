@@ -1,8 +1,12 @@
 from django.contrib import admin
 from .models import *
 # Register your models here.
+from django.contrib import admin
+from Models.employees import Employees
+from Models.application_access import ApplicationAccess
+from Models.previliges import Priviliges
 
-admin.site.register([ServiceType])
+admin.site.register([ServiceType, Employees, ApplicationAccess, Priviliges])
 
 # services ra host lai register gareko
 class ServiceInline(admin.StackedInline):
@@ -71,7 +75,7 @@ admin.site.register(Poa,HostPOA)
 
 # Email Notification lai regsiter gareko
 class HostEmailNotification(admin.ModelAdmin):
-    list_display = ['activityId', 'email', 'sendStatus', 'sendTo', 'logTime']
+    list_display = ['activityId', 'emailBody', 'logTime']
     
 admin.site.register(EmailNotification, HostEmailNotification)
 

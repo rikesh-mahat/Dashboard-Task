@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-
+from .emails import send_department_email
 # this is my mobile validation function
 def mobile_no_length(number):
     try:
@@ -131,6 +131,7 @@ class Activities(models.Model):
     created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
     comment = models.TextField(max_length=500, null=True, blank=True)
     status = models.CharField(max_length=20, choices=ACTIVITY_STATUS, default='Open')
+    sendEmail = models.BooleanField(verbose_name="Send Email", help_text="Send Email to Department", default=False)
 
     def save(self, *args, **kwargs):
         if self.id:
@@ -144,6 +145,10 @@ class Activities(models.Model):
             comment = self.comment
             tableComment = f"Title : {title} \nStartTime : {startTime} \nETA : {ETA} \nEndTime : {endTime} \nActivities : {activities} \nCreatedAt : {createdTime} \nComment : {comment}"
             ActivityTable.objects.create(actId = self, comment = tableComment, commentBy = User.objects.filter(is_superuser = True).first().username) # for superusername yours might be commentedBy
+        # if self.sendEmail:
+        #     dep_email = Department.objects.all().first().email
+        #     if dep_email:
+        #         send_department_email(self.title, self.activities, dep_email)
         super(Activities, self).save(*args, **kwargs)  
         
     def __str__(self):
@@ -169,24 +174,22 @@ class Poa(models.Model):
     poaDetails = models.TextField(max_length=250, verbose_name="POA Details")
     poaEntry = models.TimeField(auto_now_add=True, verbose_name="POA Entry")
     
+    
     def __str__(self):
         activityObj = Activities.objects.get(id = self.activityId.id)
         return "POA : " + str(activityObj.title)
     
     
     
+    
+    
 
-EMAIL_CHOICES = [
-    ('Department', 'Department'),
-    ('Client', 'Client')
-]
 class EmailNotification(models.Model):
 
     activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
-    email = models.EmailField(max_length=200, verbose_name="Email")
-    sendStatus = models.CharField(max_length=25, verbose_name="Status")
-    sendTo = models.CharField(max_length=20, choices=EMAIL_CHOICES, default='Department')
-    message = models.TextField(null=True, blank=True)
+    # email = models.EmailField(max_length=200, verbose_name="Email")
+    # sendStatus = models.CharField(max_length=25, verbose_name="Status")
+    emailBody = models.TextField(null=True, blank=True)
     logTime = models.TimeField(auto_now_add=True)
     
     # def save(self, *args, **kwargs):
@@ -195,5 +198,5 @@ class EmailNotification(models.Model):
     #         self.message = self.activityId.activities
     #     super(EmailNotification, self).save(*args, **kwargs)  
         
-    def __str__(self):
-        return self.email
+    # def __str__(self):
+    #     return self.email
