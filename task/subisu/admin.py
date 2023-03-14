@@ -2,11 +2,16 @@ from django.contrib import admin
 from .models import *
 # Register your models here.
 from django.contrib import admin
-from Models.employees import Employees
 from Models.application_access import ApplicationAccess
 from Models.previliges import Priviliges
+from Models.applications import Applications
+from Models.hosts import Hosts
+from Models.client_services import ClientServices
+from Models.departments import Departments
+from Models.staffs import Staffs
+from Models.serviceTypes import ServiceTypes
 
-admin.site.register([ServiceType, Employees, ApplicationAccess, Priviliges])
+admin.site.register([ServiceType, ApplicationAccess, Priviliges, Applications, Hosts, ClientServices, Departments, Staffs, ServiceTypes])
 
 # services ra host lai register gareko
 class ServiceInline(admin.StackedInline):
