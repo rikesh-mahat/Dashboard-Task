@@ -87,12 +87,12 @@ ACTIVITY_STATUS = [
     
 class Activities(models.Model):
     title = models.CharField(max_length=200, verbose_name="Activity Title")
-    maintenanceWindow  = models.CharField(max_length=200, blank=True, null=True)
+    maintenanceWindow  = models.CharField(max_length=200, blank=True, null=True, editable=False)
     location = models.CharField(max_length=200, null=True, blank=True)
     reason = models.TextField(verbose_name="Reasons", blank=True)
     benefits = models.TextField(verbose_name="Benefits for Layer", blank=True)
     impact = models.TextField(verbose_name="Impact", blank=True)
-    contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to ||")
+    contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to")
     startTime = models.DateTimeField(default=timezone.now(), editable=False)
     endTime = models.DateTimeField(auto_now=True ,verbose_name="Activity End Time")
     activities = models.TextField(max_length=500, verbose_name="Activities")

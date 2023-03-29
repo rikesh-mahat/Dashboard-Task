@@ -39,7 +39,7 @@ class ActivityInline(admin.StackedInline):
     extra = 0
 
 class HostActivities(admin.ModelAdmin):
-    list_display = ('id', 'title','startTime', 'endTime', 'created')
+    list_display = ('id', 'title', 'maintenanceWindow','startTime', 'endTime', 'created')
     inlines = [ActivityInline]
     
 admin.site.register(Activities, HostActivities)
