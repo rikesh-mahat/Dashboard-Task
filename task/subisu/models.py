@@ -123,6 +123,9 @@ class Activities(models.Model):
                 self.maintenanceWindow = " ".join([minutes, seconds])
             else:
                 self.maintenanceWindow = seconds
+                
+            if self.maintenanceWindow == "0 seconds":
+                self.maintenanceWindow = f"StartTime {self.startTime}"
         super().save()
      
     
