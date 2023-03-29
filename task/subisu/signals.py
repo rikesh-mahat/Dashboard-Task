@@ -17,8 +17,11 @@ def activity_created(sender, instance, created, **kwargs):
         impact = instance.impact
         unit_email = instance.contact.email
         department_email = instance.contact.departmentId.email
-        print(department_email, unit_email)
+        other_email = instance.otherEmails
         contact_list = [unit_email, department_email]
+        if not other_email:
+            contact_list.append(other_email)
+     
         
         send_department_mail(title, maintenance, location, reason, benefits, impact, contact_list)
                 
@@ -27,7 +30,7 @@ def activity_created(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Activities)
 def activity_time(sender, instance, created, **kwargs):
     if created:
-        print(instance.endTime, instance.startTime)
+        print(instance.endTime, instance.startTime, instance.created)
         timespan = instance.endTime - instance.startTime
         days = f"{timespan.days} days"  if timespan.days > 1 else f"{timespan.days} day"
         hours = f"{timespan.seconds // 3600} hours" if (timespan.seconds // 3600) > 1 else f"{timespan.seconds // 3600} hour"
@@ -36,7 +39,7 @@ def activity_time(sender, instance, created, **kwargs):
         
         seconds = f"{timespan.seconds - min  * 60} seconds"
         
-        print(timespan)
+        
 
         if int(days.split(" ")[0]) > 0:
             instance.maintenanceWindow = " ".join([days, hours, minutes, seconds])

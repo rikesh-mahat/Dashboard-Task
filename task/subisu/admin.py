@@ -10,9 +10,10 @@ from Models.client_services import ClientServices
 from Models.departments import Departments
 from Models.staffs import Staffs
 from Models.serviceTypes import ServiceTypes
-from Models.units import Units
 
-admin.site.register([ApplicationAccess, Priviliges, Applications, Hosts, ClientServices, Departments, Staffs, ServiceTypes, Units])
+from import_export.admin import ImportExportModelAdmin
+
+admin.site.register([ApplicationAccess, Priviliges, Applications, Hosts, ClientServices, Departments, Staffs, ServiceTypes])
 
 # services ra host lai register gareko
 class ServiceInline(admin.StackedInline):
@@ -38,7 +39,7 @@ class ActivityInline(admin.StackedInline):
     model = ActivityTable
     extra = 0
 
-class HostActivities(admin.ModelAdmin):
+class HostActivities(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ('id', 'title', 'maintenanceWindow','startTime', 'endTime', 'created')
     inlines = [ActivityInline]
     
