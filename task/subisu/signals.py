@@ -50,6 +50,8 @@ def activity_time(sender, instance, created, **kwargs):
         else:
             instance.maintenanceWindow = seconds
         
+        if instance.maintenanceWindow == "0 seconds":
+                instance.maintenanceWindow = f"StartTime {instance.startTime}"
         instance.save()
 
 @receiver(m2m_changed, sender=Poa.units.through)
