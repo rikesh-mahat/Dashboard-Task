@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      h1 {
+        font-size: 24px;
+        margin-top: 0;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <p>The following maintenance request has been submitted:</p>
+    <table>
+      <tr>
+        <th>Location</th>
+        <td>{{ location }}</td>
+      </tr>
+      <tr>
+        <th>Maintenance Type</th>
+        <td>{{ maintenance }}</td>
+      </tr>
+      <tr>
+        <th>Reason</th>
+        <td>{{ reason }}</td>
+      </tr>
+      <tr>
+        <th>Benefits</th>
+        <td>{{ benefits }}</td>
+      </tr>
+    </table>
+  </body>
+</html>

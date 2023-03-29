@@ -17,7 +17,7 @@ class ClientServices(models.Model):
     domainName = models.CharField(max_length=250)
     srvType = models.ForeignKey(ServiceTypes, on_delete=models.PROTECT)
     hostId = models.ForeignKey(Hosts, on_delete=models.PROTECT)
-    email = models.EmailField()
+    # email = models.EmailField()
     primaryContactName = models.CharField(max_length=250)
     primaryContactNumber = models.BigIntegerField(validators=[mobile_number_validation])
     primaryContactEmail = models.EmailField()

@@ -19,5 +19,5 @@ class ApplicationAccess(models.Model):
     applicationId = models.ForeignKey(Applications, on_delete=models.PROTECT, related_name='user_id')
     applicationUserId = models.IntegerField()
     previligeId = models.ForeignKey(Priviliges, on_delete=models.PROTECT)
-    applicationAccountStatus = models.BooleanField(default = True, choices=APPLICATION_ACCOUNT_OPTIONS)
+    applicationAccountStatus = models.CharField(max_length = 200, choices=APPLICATION_ACCOUNT_OPTIONS)
     applicationAccessMethod = models.CharField(max_length=100, choices=APPLICATION_ACCESS_OPTIONS)

@@ -1,38 +1,40 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
-from .models import Activities, ActivityTable, EmailNotification, Poa, Department
-from .emails import send_department_email
+from .models import Activities, Poa
+from .emails import send_department_mail, send_poa_emails
 from django.contrib.auth.models import User
-
-# signal : kunai acitivity create bhayesi signal aaucha ani hamley activitytable ma tyo comment haru automatically halchum
 
 
 @receiver(post_save, sender=Activities)
-# sender  = Activties, instance = Activities, created bhaneko create bhayo ki nai bhanera check garna lai
-def email_and_comment(sender, instance, created, **kwargs):
-    if created:
-        title = instance.title
-        startTime = instance.startTime
-        ETA = instance.ETA
-        endTime = instance.endTime
-        activities = instance.activities
-        createdTime = instance.created
-        comment = instance.comment
-        tableComment = f"Title : {title} \nStartTime : {startTime} \nETA : {ETA} \nEndTime : {endTime} \nActivities : {activities} \nCreatedAt : {createdTime} \nComment : {comment}"
-        ActivityTable.objects.create(actId=instance, comment=tableComment, commentBy=User.objects.filter(
-            is_superuser=True).first().username)  # your might be commentedBy
 
-        if instance.sendEmail:
-            body = f"Activities Remarks : {activities}"
-            if instance.status == "Pending":
-                poa_details = Poa.objects.filter(
-                    activityId=instance).last().poaDetails
-                body = activities
-                if poa_details:
-                    body += f"Poa Detail : {poa_details}"
-            EmailNotification.objects.create(
-                activityId=instance, emailBody=body)
-            # actually sending the mail to user
-            dep_email = Department.objects.all().first().email
-            if dep_email:
-                send_department_email(title, body, dep_email)
+def activity_created(sender, instance, created, **kwargs):
+    if created and instance.sendEmail:
+        title = instance.title 
+        maintenance = instance.maintenanceWindow
+        location = instance.location
+        reason = instance.reason
+        benefits = instance.benefits
+        impact = instance.impact
+        unit_email = instance.contact.email
+        department_email = instance.contact.departmentId.Email
+        print(department_email, unit_email)
+        contact_list = [unit_email, department_email]
+        
+        send_department_mail(title, maintenance, location, reason, benefits, impact, contact_list)
+                
+
+
+
+
+@receiver(m2m_changed, sender=Poa.units.through)
+def poa_units_changed(sender, instance, action, **kwargs):
+    if action in ('post_add', 'post_remove', 'post_clear'):
+     
+        poa = instance
+        units = poa.units.all()
+        unit_email_list = [unit.email for unit in units] if units.exists() else []
+        
+        if unit_email_list:
+            subject = poa.activityId.title
+            message = poa.poaDetails
+            send_poa_emails(subject, message, unit_email_list)
