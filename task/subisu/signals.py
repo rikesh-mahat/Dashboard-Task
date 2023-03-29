@@ -27,6 +27,7 @@ def activity_created(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Activities)
 def activity_time(sender, instance, created, **kwargs):
     if created:
+        print(instance.endTime, instance.startTime)
         timespan = instance.endTime - instance.startTime
         days = f"{timespan.days} days"  if timespan.days > 1 else f"{timespan.days} day"
         hours = f"{timespan.seconds // 3600} hours" if (timespan.seconds // 3600) > 1 else f"{timespan.seconds // 3600} hour"
@@ -34,7 +35,9 @@ def activity_time(sender, instance, created, **kwargs):
         minutes = f"{min} minutes" if min > 1 else f"{min} minute"
         
         seconds = f"{timespan.seconds - min  * 60} seconds"
-        total = None
+        
+        print(timespan)
+
         if int(days.split(" ")[0]) > 0:
             instance.maintenanceWindow = " ".join([days, hours, minutes, seconds])
         elif int(hours.split(" ")[0]) > 0:
