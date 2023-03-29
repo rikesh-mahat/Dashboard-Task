@@ -9,44 +9,36 @@
         font-size: 14px;
         line-height: 1.5;
       }
-      h1 {
-        font-size: 24px;
-        margin-top: 0;
+      .card{
+        display: flex;
+        flex-direction:column;
+        justify-content: column;
+        background-color: red;
+        padding-top: 0;
+        padding-left: 2em;
+        }
+      .title{
+        font-size: 3rem;
+        text-align: center;
+        background-color: rebeccapurple;
       }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-      }
-      th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      th {
-        background-color: #f2f2f2;
-      }
+      
     </style>
   </head>
   <body>
-    <h1>{{ title }}</h1>
-    <p>The following maintenance request has been submitted:</p>
-    <table>
-      <tr>
-        <th>Location</th>
-        <td>{{ location }}</td>
-      </tr>
-      <tr>
-        <th>Maintenance Type</th>
-        <td>{{ maintenance }}</td>
-      </tr>
-      <tr>
-        <th>Reason</th>
-        <td>{{ reason }}</td>
-      </tr>
-      <tr>
-        <th>Benefits</th>
-        <td>{{ benefits }}</td>
-      </tr>
-    </table>
+    <div class="card">
+        <h1 class="title">Title</h1>
+        <div class="content">
+          <h2 class="heading">Maintenance</h2>
+          <p class="paragraph">{{maintenance}}</p>
+          <h2 class="heading">Location</h2>
+          <p class="paragraph">{{location}}</p>
+          <h2 class="heading">Reason</h2>
+          <p class="paragraph">{{reason}}</p>
+          <h2 class="heading">Benefits</h2>
+          <p class="paragraph">{{benefits}}</p>
+        </div>
+      </div>
+      
   </body>
 </html>
