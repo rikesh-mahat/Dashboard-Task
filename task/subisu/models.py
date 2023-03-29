@@ -93,7 +93,7 @@ class Activities(models.Model):
     benefits = models.TextField(verbose_name="Benefits for Layer", blank=True)
     impact = models.TextField(verbose_name="Impact", blank=True)
     contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to")
-    startTime = models.DateTimeField(default=timezone.now(), editable=False)
+    startTime = models.DateTimeField(auto_now_add=True, editable=False)
     endTime = models.DateTimeField(auto_now=True ,verbose_name="Activity End Time")
     activities = models.TextField(max_length=500, verbose_name="Activities")
     created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
