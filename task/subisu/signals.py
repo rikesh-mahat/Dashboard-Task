@@ -5,31 +5,11 @@ from .emails import send_department_mail, send_poa_emails
 from django.contrib.auth.models import User
 
 
-@receiver(post_save, sender=Activities)
 
-def activity_created(sender, instance, created, **kwargs):
+
+@receiver(post_save, sender=Activities)
+def activity_time_and_mail(sender, instance, created, **kwargs):
     if created and instance.sendEmail:
-        title = instance.title 
-        maintenance = instance.maintenanceWindow
-        location = instance.location
-        reason = instance.reason
-        benefits = instance.benefits
-        impact = instance.impact
-        unit_email = instance.contact.email
-        department_email = instance.contact.departmentId.email
-        other_email = instance.otherEmails
-        contact_list = [unit_email, department_email]
-        if not other_email:
-            contact_list.append(other_email)
-     
-        
-        send_department_mail(title, maintenance, location, reason, benefits, impact, contact_list)
-                
-
-# for time related management
-@receiver(post_save, sender=Activities)
-def activity_time(sender, instance, created, **kwargs):
-    if created:
         print(instance.endTime, instance.startTime, instance.created)
         timespan = instance.endTime - instance.startTime
         days = f"{timespan.days} days"  if timespan.days > 1 else f"{timespan.days} day"
@@ -53,6 +33,20 @@ def activity_time(sender, instance, created, **kwargs):
         if instance.maintenanceWindow == "0 seconds":
                 instance.maintenanceWindow = f"StartTime {instance.startTime}"
         instance.save()
+        
+        title = instance.title 
+        maintenance = instance.maintenanceWindow
+        location = instance.location
+        reason = instance.reason
+        benefits = instance.benefits
+        impact = instance.impact
+        unit_email = instance.contact.email
+        department_email = instance.contact.departmentId.email
+        other_email = instance.otherEmails.split()
+        contact_list = [unit_email, department_email]
+        if len(other_email) > 1:
+            contact_list.extend(other_email)
+        send_department_mail(title, maintenance, location, reason, benefits, impact, contact_list)
 
 @receiver(m2m_changed, sender=Poa.units.through)
 def poa_units_changed(sender, instance, action, **kwargs):

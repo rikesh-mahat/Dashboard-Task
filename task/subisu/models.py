@@ -9,7 +9,17 @@ from Models.departments import Departments
 from Models.hosts import Hosts
 from Models.staffs import Staffs
 from django.utils import timezone
+from django.core.validators import validate_email
 
+
+def validate_email_list(value):
+    # validation multiple email list
+    emails = value.split()
+    for email in emails:
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise ValidationError('Invalid email address: {}'.format(email))
 def mobile_no_length(number):
     try:
         number  = int(number)
@@ -97,7 +107,7 @@ class Activities(models.Model):
     endTime = models.DateTimeField(auto_now=True ,verbose_name="Activity End Time")
     activities = models.TextField(max_length=500, verbose_name="Activities")
     created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
-    otherEmails = models.EmailField(blank=True, null=True)
+    otherEmails = models.TextField(blank=True, null=True, help_text="Add other emails separated by spaces", validators=[validate_email_list])
     Comment= models.CharField(max_length=200, null=True)
     status= models.CharField(max_length=20,choices=ACTIVITY_STATUS, default= 'Open')
     sendEmail = models.BooleanField(verbose_name = "Send Email",default=False, help_text="Send Email Notification to Department")

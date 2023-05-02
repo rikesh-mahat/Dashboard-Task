@@ -1,0 +1,62 @@
+{%extends 'subisu/base.html' %}
+
+
+{%block start%}
+
+<div class="d-flex justify-content-end  px-6">
+  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'add_host' %}">
+    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+    <span class="btn-inner--text">Add Hosts</span>
+  </a>
+</div>
+
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+        
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Device ID</th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Hostname</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Device Type</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">POP Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">POP Latitude</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">PIO Latitude</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Model Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">District Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Region Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Province Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Branch Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hypervisor</th>
+           
+         
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for host in hosts %}
+            <tr>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.deviceId }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.hostname }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.deviceType }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.popName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.popLatitude }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.pioLatitude }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.modelName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.districtname }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.regionName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.provinceName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.branchName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0">{{ host.hyperVisor }}</h6></td>
+             
+            </tr>
+        {% endfor %}
+
+
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}
