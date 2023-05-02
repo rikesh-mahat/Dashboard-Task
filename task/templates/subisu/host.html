@@ -19,17 +19,17 @@
         
             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Device ID</th>
             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Hostname</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Device Type</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">POP Name</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">POP Latitude</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">PIO Latitude</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Model Name</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">District Name</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Region Name</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Province Name</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Branch Name</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Hypervisor</th>
-           
+            <th class="text-center text-uppercase text-secondary text-x font-weight-bolder opacity-7">Device Type</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">POP Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">POP Latitude</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">PIO Latitude</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Model Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">District Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Region Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Province Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Branch Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Hypervisor</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Action</th>
          
         </tr>
       </thead>
@@ -37,19 +37,19 @@
 
         {% for host in hosts %}
             <tr>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.deviceId }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.hostname }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.deviceType }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.popName }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.popLatitude }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.pioLatitude }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.modelName }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.districtname }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.regionName }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.provinceName }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.branchName }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0">{{ host.hyperVisor }}</h6></td>
-             
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.deviceId }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.hostname }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.deviceType }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.popName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.popLatitude }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.pioLatitude }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.modelName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.districtname }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.regionName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.provinceName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.branchName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ host.hyperVisor }}</h6></td>
+              <td class="align-middle text-center"><a href="{%url 'delete_host' host.id%}" class="btn btn-primary btn-sm">Delete</button></td>
             </tr>
         {% endfor %}
 
