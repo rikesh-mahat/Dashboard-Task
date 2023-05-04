@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 
 def mobile_number_validation(value):
-    if len(value) != 10:
+    if len(str(value)) != 10:
         raise ValidationError("Invalid Mobile Number")
     else:
         try:
@@ -25,7 +25,7 @@ class ClientServices(models.Model):
     secondaryContactNumber = models.BigIntegerField(validators=[mobile_number_validation])
     secondaryContactEmail = models.EmailField()
     serviceStatus = models.BooleanField(default = True)
-    serviceCreatedData = models.DateTimeField()
+    serviceCreatedDate = models.DateTimeField()
     
     def __str__(self):
         return self.primaryContactName

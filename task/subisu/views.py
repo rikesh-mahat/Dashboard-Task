@@ -20,8 +20,12 @@ def dashboard(request):
      # yoh tyo application dekhauna ko lagi hai
     applications = Applications.objects.all()
      
+     
+    # client services ko lagi
+    client_services = ClientServices.objects.all()
     context = { 
-        'applications' : applications
+        'applications' : applications,
+        'client_services' : client_services
     }
     return render(request, 'subisu/dashboard.html', context)
 

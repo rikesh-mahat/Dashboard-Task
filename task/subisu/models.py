@@ -25,7 +25,8 @@ def mobile_no_length(number):
         number  = int(number)
     except:
         raise ValidationError("Sorry the number cannot contaain any symbols or alphabets")
-    if len(str(number)) != 10:
+    num = str(number)
+    if len(num) != 10:
         raise ValidationError("Mobile Number digits should be exactly 10")
 
 # yoh chai ip validation function 
