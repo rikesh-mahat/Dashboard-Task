@@ -96,23 +96,11 @@
             <div class="card-header pb-0">
               <div class="row">
                 <div class="col-lg-6 col-7">
-                  <h6>Staff</h6>
+                  <h6>Applications</h6>
                   <p class="text-sm mb-0">
-                    <i class="fa fa-check text-info" aria-hidden="true"></i>
-                    <span class="font-weight-bold ms-1">{{staffs_count}}</span> 
+                    
+                    <span class="font-weight-bold ms-1">Total : {{applications.count}}</span> 
                   </p>
-                </div>
-                <div class="col-lg-6 col-5 my-auto text-end">
-                  <div class="dropdown float-lg-end pe-4">
-                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-ellipsis-v text-secondary"></i>
-                    </a>
-                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                    </ul>
-                  </div>
                 </div>
               </div>
             </div>
@@ -121,39 +109,58 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> No. of Application</th>
-                     
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Name</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">URL</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Dev Language</th>
+                      <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">No of Users</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {%for staff in staffs%}
+                    {% comment %} name = models.CharField(max_length=200)
+                    url = models.URLField(max_length=500)
+                    devLanguage = models.CharField(max_length=200)
+                    sourceCode = models.CharField(max_length=200, choices=SOURCE_CODE_OPTIONS)
+                    serverAccess = models.CharField(max_length=50)
+                    serverControl = models.CharField(max_length=150, choices=SERVER_CONTROL_OPTIONS)
+                    hostId = models.ForeignKey(Hosts, on_delete=models.PROTECT, null=True, blank=True) {% endcomment %}
+                    
+                    {%for app in applications %}
                     <tr>
+
                       <td>
                         <div class="d-flex px-2 py-1">
-                          
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">{{staff.firstName}} {%if staff.middleName%} {{staff.middleName}}{%endif%} {{staff.lastName}}</h6>
+                            <h6 class="mb-0 text-xs font-weight-bolder">{{app.name}}</h6>
                           </div>
                         </div>
                       </td>
 
                       <td>
-                        {% for application_access in staff.applicationaccess_set.all %}
-                            {{ application_access.applicationId }}
-                        {% empty %}
-                            -
-                        {% endfor %}
-                    </td>
-                    
-
-                      <td class="align-middle text-center text-sm">
-                        {%if staff.status%} <i class="fas fa-check-circle text-success"></i>
-                        {%else%} <i class="fas fa-times-circle text-danger"></i>
-                        {%endif%}
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <a href="{{app.url}}" class="mb-0 text-xs font-weight-bolder">{{app.url}}</a>
+                          </div>
+                        </div>
                       </td>
-                     
+
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-xs font-weight-bolder">{{app.devLanguage}}</h6>
+                          </div>
+                        </div>
+                      </td>
+
+                      
+                      <td>
+                        <div class="d-flex justify-content-center px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-xs text Centerfont-weight-bolder">{%if app.applicationaccess_set.all.count%}{{app.applicationaccess_set.all.count}}{%else%}No Users{%endif%}</h6>
+                          </div>
+                        </div>
+                      </td>
+
+  
                     </tr>
                     {%endfor%}
                   </tbody>

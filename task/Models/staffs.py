@@ -1,6 +1,6 @@
 from django.db import models
 from Models.units import Units
-
+from django.contrib.auth.models import User
 class Staffs(models.Model):
     firstName = models.CharField(max_length = 100)
     middleName = models.CharField(max_length=100, null = True, blank = True)

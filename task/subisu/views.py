@@ -14,32 +14,19 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 
-@login_required
+@login_required()
 def dashboard(request):
-    # yesma mailey kei pani change garina hai
-    # staff counts
-    staff_counts = Staffs.objects.count()
     
-    # department Counts
-    department_counts = Departments.objects.count()
-    
-    # no of units
-    client_count = ClientServices.objects.count()
-    
-    # no of applications
-    applications_counts = Applications.objects.count()
+     # yoh tyo application dekhauna ko lagi hai
+    applications = Applications.objects.all()
      
-     
-    context = {
-        'staffs' : staff_counts,
-        'client_count' : client_count,
-        'application' : applications_counts,
-        'departments' : department_counts
+    context = { 
+        'applications' : applications
     }
-    return render(request, 'subisu/dashboard.html')
+    return render(request, 'subisu/dashboard.html', context)
 
 
-@login_required
+@login_required()
 def hosts(request):
     
     hosts = Hosts.objects.all()
@@ -50,7 +37,7 @@ def hosts(request):
 
 
 
-@login_required
+@login_required()
 def add_host(request):
     
     if request.method == "POST":
