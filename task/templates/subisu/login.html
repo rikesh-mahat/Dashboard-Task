@@ -1,0 +1,68 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+  <title>
+    CMS
+  </title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="{% static './assets/css/nucleo-icons.css" ' %} rel="stylesheet" />
+  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="{% static 'assets/css/material-dashboard.min.css' %}?v=2.1.2" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+
+
+</head>
+
+<body class="d-flex justify-content-center align-items-center" style="height:100vh; background-color:#EFF2F1">
+
+    
+      <div class="card card-stats" style="width: 500px;">
+        <div class="card-header card-header-primary card-header-icon">
+          
+            
+          
+          <h4 class="card-title text-center"> <i class="material-icons">account_circle</i> Subisu Login</h4>
+        </div>
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
+            {%include 'subisu/alert.html' %}
+            <div class="input-group input-group-static mb-4">
+              <label>Email</label>
+              <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="input-group input-group-static mb-4">
+              <label>Password</label>
+              <input type="password" class="form-control" name="password" required>
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+            <button type="submit" class="btn btn-primary btn-block btn-lg">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+  
+  </body>
+  
+  
+  
+  
+</html>

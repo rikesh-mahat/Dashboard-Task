@@ -10,10 +10,10 @@
                 <form method="POST" action="{%url 'add_host'%}">
                     {% csrf_token %}
 
-                    <div class="input-group input-group-static mb-4">
+                    {% comment %} <div class="input-group input-group-static mb-4">
                     <label>Device ID</label>
                     <input type="number" class="form-control" name="deviceid" required>
-                    </div>
+                    </div> {% endcomment %}
 
                     <div class="input-group input-group-static mb-4">
                     <label>Hostname</label>

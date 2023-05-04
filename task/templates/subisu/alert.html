@@ -1,0 +1,24 @@
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{%if message.tags == 'error' %}danger{%else%}{{ message.tags }}{%endif%} alert-dismissible text-white fade show" role="alert">
+        <span class="alert-icon align-middle">
+        <span class="material-icons text-md">
+        account_circle
+        </span>
+      </span>
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <script>
+      $(document).ready(function() {
+        window.setTimeout(function() {
+          $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove();
+          });
+        }, 3000);
+      });
+    </script>
+  {% endfor %}
+{% endif %}
