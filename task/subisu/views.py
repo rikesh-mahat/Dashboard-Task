@@ -11,6 +11,10 @@ from Models.staffs import Staffs
 from Models.units import Units
 from Models.client_services import ClientServices
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
 def dashboard(request):
     # yesma mailey kei pani change garina hai
     # staff counts
@@ -35,7 +39,7 @@ def dashboard(request):
     return render(request, 'subisu/dashboard.html')
 
 
-
+@login_required
 def hosts(request):
     
     hosts = Hosts.objects.all()
@@ -46,7 +50,7 @@ def hosts(request):
 
 
 
-
+@login_required
 def add_host(request):
     
     if request.method == "POST":
@@ -109,3 +113,11 @@ def login_user(request):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
             
     return render(request, 'subisu/login.html')
+
+
+
+def logout_user(request):
+    messages.info(request, "Thank you for using CMS. Sign in again")
+    logout(request)
+    
+    return redirect('login')
