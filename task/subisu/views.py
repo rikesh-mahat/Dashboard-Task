@@ -142,6 +142,7 @@ def register_user(request):
         
         user = User.objects.create(first_name = fname, last_name = lname, username = username, email = email)
         user.set_password(pass2)
+        user.save()
         
         return redirect('admins')
 
