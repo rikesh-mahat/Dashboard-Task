@@ -1,0 +1,50 @@
+{%extends 'subisu/base.html' %}
+
+
+{%block start%}
+
+<div class="d-flex justify-content-end  px-6">
+  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'register' %}">
+    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+    <span class="btn-inner--text">Add Admin</span>
+  </a>
+</div>
+
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+        
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">First Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Last Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">username</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">email</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Action</th>
+            
+         
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for admin in admins %}
+            <tr>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{admin.first_name}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ admin.last_name }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ admin.username }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ admin.email }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ admin.email }}</h6></td>
+              <td class="text-center "><a href="" class="btn btn-primary btn-sm">Delete </a>&nbsp;<a href="{%url 'edit_admin' admin.id%}" class="btn btn-primary btn-sm">Edit</a></td>
+          
+            </tr>
+        {% endfor %}
+
+
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}
