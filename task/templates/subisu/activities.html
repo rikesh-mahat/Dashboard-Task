@@ -1,0 +1,72 @@
+{%extends 'subisu/base.html' %}
+
+
+{%block start%}
+
+<div class="d-flex justify-content-end  px-6">
+  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'add_host' %}">
+    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+    <span class="btn-inner--text">Add Hosts</span>
+  </a>
+</div>
+
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+            {% comment %} title = models.CharField(max_length=200, verbose_name="Activity Title")
+    maintenanceWindow  = models.CharField(max_length=200, blank=True, null=True, editable=False)
+    location = models.CharField(max_length=200, null=True, blank=True)
+    reason = models.TextField(verbose_name="Reasons", blank=True)
+    benefits = models.TextField(verbose_name="Benefits for Layer", blank=True)
+    impact = models.TextField(verbose_name="Impact", blank=True)
+    contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to")
+    startTime = models.DateTimeField(auto_now_add=True, verbose_name="Activity Start Time")
+    endTime = models.DateTimeField(auto_now=True ,verbose_name="Activity End Time")
+    activities = models.TextField(max_length=500, verbose_name="Activities")
+    created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
+    otherEmails = models.TextField(blank=True, null=True, help_text="Add other emails separated by spaces", validators=[validate_email_list])
+    Comment= models.CharField(max_length=200, null=True)
+    status= models.CharField(max_length=20,choices=ACTIVITY_STATUS, default= 'Open')
+    sendEmail = models.BooleanField(verbose_name = "Send Email",default=False, help_text="Send Email Notification to Department") {% endcomment %}
+        
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">title</th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ETA</th>
+            <th class="text-center text-uppercase text-secondary text-x font-weight-bolder opacity-7">location</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">contact</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">start time</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">endtime</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">created</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">status</th>
+       
+            
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Action</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for activity in activities %}
+            <tr>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.title }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.ETA}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.location }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.contact }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.startTime }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.endTime }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.created }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.status }}</h6></td>
+      
+              <td class="align-middle text-center"><a href="" class="btn btn-primary btn-sm">Delete</button></td>
+            </tr>
+        {% endfor %}
+
+
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}

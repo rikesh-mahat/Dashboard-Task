@@ -13,7 +13,11 @@ from Models.client_services import ClientServices
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+from Models.departments import Departments
+from Models.serviceTypes import ServiceTypes
+from .models import *
 
+from .forms import ActivitiesForm
 @login_required()
 def dashboard(request):
     
@@ -23,9 +27,34 @@ def dashboard(request):
      
     # client services ko lagi
     client_services = ClientServices.objects.all()
+    
+    
+    # for line graph getting all the counts
+    
+    # data = {
+    #             'Applications': Applications.objects.count(),
+    #             'Staffs': Staffs.objects.count(),
+    #             'Units': Units.objects.count(),
+    #             'ClientServices': ClientServices.objects.count(),
+    #             'Hosts': Hosts.objects.count(),
+    #             'Departments': Departments.objects.count(),
+    #             'ServiceTypes': ServiceTypes.objects.count(),
+    #         }
+
+    # data_list = [(model, count) for model, count in data.items()]
+    
+    
+    data = {}
+    for i in ACTIVITY_STATUS:
+        data[i[0]] = Activities.objects.filter(status = i[0]).count()
+    
+    data_list = [(status, count)  for status, count in data.items()]
+    
+    
     context = { 
         'applications' : applications,
-        'client_services' : client_services
+        'client_services' : client_services,
+        'data_list' : data_list
     }
     return render(request, 'subisu/dashboard.html', context)
 
@@ -161,3 +190,12 @@ def display_admin(request):
 def edit_admin(request, id):
     user = User.objects.get(id = id)
     return render(request, 'subisu/editadmin.html', {'user' : user})
+
+
+
+def activities(request):
+    activities = Activities.objects.all().order_by('-created')
+    context = {
+        'activities' : activities
+    }
+    return render(request, 'subisu/activities.html', context)

@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div class="col-xl-3 col-sm-6">
+        <div class="col-xl-3 mb-4 col-sm-6">
           <div class="card">
             <div class="card-header p-3 pt-2">
               <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
@@ -67,29 +67,55 @@
         </div>
       </div>
 
-      <div class="row mt-4">
-        <div class="col-lg-4 mt-4 mb-3">
-          <div class="card z-index-2 ">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-              <div class="bg-white shadow-dark border-radius-lg py-3 pe-1">
-                <div class="chart">
-                  <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="card-body bg-white shadow-dark dark">
-              <h6 class="mb-0 ">Completed Activities</h6>
-              <p class="text-sm "></p>
-              <hr class="dark horizontal">
-              <div class="d-flex ">
-                <i class="material-icons text-sm my-auto me-1">schedule</i>
-                <p class="mb-0 text-sm">just updated</p>
-              </div>
-            </div>
-          </div>
+
+      <div class="col-lg-12 col-md-6 mb-4">
+        <div class="chart-container d-flex justify-content-center align-items-center bg-white rounded" style="position: relative; height:65vh;">
+          <canvas id="myChart"></canvas>
         </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+        <script>
+          const ctx = document.getElementById('myChart');
+        
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: [{%for data in data_list%} '{{data.0}}', {%endfor%}],
+              datasets: [{
+                label: 'Numbers of data',
+                data: [{%for data in data_list%} '{{data.1}}', {%endfor%}],
+                backgroundColor : [
+                  'rgb(216, 198, 5)',
+                  'rgb(3, 169, 37)',
+                  'rgb(190, 195, 0)',
+                  'rgb(190, 100, 0)',
+                  'rgb(190, 1, 50)',
+                  'rgb(190, 150, 200)',
+                ],
+               
+                borderWidth: 2
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              },
+
+              plugins:{
+                  title :{
+                     display: true,
+                     text: 'Numbers'
+                  }
+              }
+            }
+          });
+        </script>
       </div>
 
+      
       <div class="row mb-4">
         <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
           <div class="card">

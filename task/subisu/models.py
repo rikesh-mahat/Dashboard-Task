@@ -10,6 +10,7 @@ from Models.hosts import Hosts
 from Models.staffs import Staffs
 from django.utils import timezone
 from django.core.validators import validate_email
+from datetime import timedelta
 
 
 def validate_email_list(value):
@@ -98,46 +99,35 @@ ACTIVITY_STATUS = [
     
 class Activities(models.Model):
     title = models.CharField(max_length=200, verbose_name="Activity Title")
-    maintenanceWindow  = models.CharField(max_length=200, blank=True, null=True, editable=False)
+    
     location = models.CharField(max_length=200, null=True, blank=True)
     reason = models.TextField(verbose_name="Reasons", blank=True)
     benefits = models.TextField(verbose_name="Benefits for Layer", blank=True)
     impact = models.TextField(verbose_name="Impact", blank=True)
     contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to")
-    startTime = models.DateTimeField(auto_now_add=True, verbose_name="Activity Start Time")
-    endTime = models.DateTimeField(auto_now=True ,verbose_name="Activity End Time")
+    startTime = models.DateTimeField(null=True, blank=True, verbose_name="Activity Start Time")
+    endTime = models.DateTimeField(null=True, blank=True,verbose_name="Activity End Time")
     activities = models.TextField(max_length=500, verbose_name="Activities")
     created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
     otherEmails = models.TextField(blank=True, null=True, help_text="Add other emails separated by spaces", validators=[validate_email_list])
     Comment= models.CharField(max_length=200, null=True)
     status= models.CharField(max_length=20,choices=ACTIVITY_STATUS, default= 'Open')
     sendEmail = models.BooleanField(verbose_name = "Send Email",default=False, help_text="Send Email Notification to Department")
+    ETA = models.CharField(max_length=200, null=True, blank=True, editable=False)
 
     def save(self):
-        if self.id:
-            print(self.endTime, self.startTime, self.created)
-            timespan = self.endTime - self.startTime
-            days = f"{timespan.days} days"  if timespan.days > 1 else f"{timespan.days} day"
-            hours = f"{timespan.seconds // 3600} hours" if (timespan.seconds // 3600) > 1 else f"{timespan.seconds // 3600} hour"
-            min  = (timespan.seconds // 60) % 60
-            minutes = f"{min} minutes" if min > 1 else f"{min} minute"
-            
-            seconds = f"{timespan.seconds - min  * 60} seconds"
-            
-            
+        if self.startTime and self.endTime:
+            duration = self.endTime - self.startTime
 
-            if int(days.split(" ")[0]) > 0:
-                self.maintenanceWindow = " ".join([days, hours, minutes, seconds])
-            elif int(hours.split(" ")[0]) > 0:
-                self.maintenanceWindow = " ".join([hours, minutes, seconds])
-            elif int(minutes.split(" ")[0]) > 0:
-                self.maintenanceWindow = " ".join([minutes, seconds])
+            if duration < timedelta(hours=1):
+                self.ETA = f"{duration.seconds//60} min"
+            elif duration < timedelta(hours=24):
+                self.ETA = f"{duration.seconds//3600} hr"
             else:
-                self.maintenanceWindow = seconds
-                
-            if self.maintenanceWindow == "0 seconds":
-                self.maintenanceWindow = f"StartTime {self.startTime}"
+                days = duration.days if duration.days > 1 else 1
+                self.ETA = f"{days} day"
         super().save()
+            
      
     
     def __str__(self):
