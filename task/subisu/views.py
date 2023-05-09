@@ -17,9 +17,13 @@ from Models.departments import Departments
 from Models.serviceTypes import ServiceTypes
 from .models import *
 
-from .forms import ActivitiesForm
+from .forms import ActivitiesForm, StaffsForm
 @login_required()
 def dashboard(request):
+    
+    # hosts count
+    
+    host_counts = Hosts.objects.count()
     
      # yoh tyo application dekhauna ko lagi hai
     applications = Applications.objects.all()
@@ -54,7 +58,8 @@ def dashboard(request):
     context = { 
         'applications' : applications,
         'client_services' : client_services,
-        'data_list' : data_list
+        'data_list' : data_list,
+        'host_counts' : host_counts
     }
     return render(request, 'subisu/dashboard.html', context)
 
@@ -199,3 +204,35 @@ def activities(request):
         'activities' : activities
     }
     return render(request, 'subisu/activities.html', context)
+
+
+
+def display_staffs(request):
+    staffs = Staffs.objects.all()
+    context = {
+        'staffs' : staffs
+    }
+    return render(request, 'subisu/staffs.html', context)
+
+
+def delete_staff(request, id):
+    staff = Staffs.objects.get(id = id)
+    staff.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def create_staff(request):
+    if request.method == 'POST':
+        form = StaffsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('staffs-list')  
+    else:
+        form = StaffsForm()
+    
+    context = {
+        'form': form
+        }
+    
+
+    return render(request, 'subisu/addstaff.html', context)

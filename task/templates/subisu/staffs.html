@@ -1,0 +1,55 @@
+{%extends 'subisu/base.html' %}
+
+
+{%block start%}
+
+<div class="d-flex justify-content-end  px-6">
+  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'create_staff' %}">
+    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+    <span class="btn-inner--text">Add Staff</span>
+  </a>
+</div>
+
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+            
+
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Employee Id</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">First Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Middl Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Last Name</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">email</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Unit</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Action</th>
+            
+         
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for staff in staffs %}
+            <tr>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{staff.fempId}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ staff.firstName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{%if  staff.middleName%}{{ staff.middleName }}{%else%}-{%endif%}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ staff.lastName }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ staff.email }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ staff.unitId }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{%if staff.status%} Active {%else%} Inactive {%endif%}</h6></td>
+              <td class="text-center "><a href="{%url 'delete_staff' staff.id%}" class="btn btn-primary btn-sm">Delete </a>&nbsp;<a href="" class="btn btn-primary btn-sm">Edit</a></td>
+          
+            </tr>
+        {% endfor %}
+
+
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}
