@@ -1,7 +1,38 @@
 {%extends 'subisu/base.html'%}
 
 {%block start%}
-<form method="POST">
-{{form.as_p}}
-</form>
+<div class="row justify-content-center">
+    <div class="col-md-11">
+        <div class="card ">
+            <div class="card-body">
+            <h3 class="card-title text-center">Activities Form</h3>
+            <form method="POST">
+                {%include 'subisu/alert.html' %}
+                {% csrf_token %}
+                {%for field in form%}
+                
+                <div class="input-group input-group-static mb-4">
+                {{ field.label_tag }}
+                {{ field }}
+                </div>
+                
+                {%endfor%}
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-success">Save</button>
+                <a  class="btn btn-outline-secondary" href="{%url 'activities'%}">Cancel</a>
+
+              </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+      $("#datetimepicker1").datetimepicker({
+        format: 'DD/MM/YYYY HH:mm',
+      });
+    });
+  </script>
 {%endblock%}

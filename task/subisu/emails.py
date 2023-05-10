@@ -9,16 +9,20 @@ def send_department_mail(title, maintenance, location, reason, benefits, impact 
     subject  = title
     receiver = contact
     
-    context = {'maintenance' : maintenance, 'location' : location, 'reason' : reason, 'benefits' : benefits, 'title' : title}
+    context = {'title' : title, 'maintenance' : maintenance, 'location' : location, 'reason' : reason, 'benefits' : benefits, 'impact' : impact}
     html_content = render_to_string('subisu/departmentmail.html', context)
     text_content = strip_tags(html_content)
     
-    email_message = EmailMultiAlternatives(subject, text_content, sender, receiver)
-    email_message.attach_alternative(html_content, "text/html")
-    email_message.send()
-
+    msg = True
+    try:
+        email_message = EmailMultiAlternatives(subject, text_content, sender, receiver)
+        email_message.attach_alternative(html_content, "text/html")
+        email_message.send()
+    except:
+        msg = False
+    return msg
 
 def send_poa_emails(subject, message, receiver):
-    sender = settings.EMAIL_HOST_USER
+    sender = settings.EMAIL_HOST_USER 
     if receiver:
         send_mail(subject, message, sender, receiver)

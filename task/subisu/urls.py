@@ -14,5 +14,10 @@ urlpatterns = [
     path('activities/', activities, name='activities'),
     path('staffs/', display_staffs, name='staffs'),
     path('delete-staff/<int:id>/', delete_staff, name='delete_staff'),
-    path('create-staff/', create_staff, name='create_staff')
+    path('create-staff/', create_staff, name='create_staff'),
+    path('add-activities/', create_acitivities, name ='create_activities'),
+    path('delete-activity/<int:id>/',delete_activity, name= 'delete_activity'),
+    path('edit-activity/<int:id>/', edit_activities, name='edit_activity'),
+    path('send-activities-mail/<int:id>/', send_activities_mail, name='activities_mail'),
+    path('email/', view_emails, name='emails')
 ]

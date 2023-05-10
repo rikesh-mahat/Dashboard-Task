@@ -94,7 +94,6 @@ ACTIVITY_STATUS = [
     ('Pending', 'Pending'),
     ('Open' , 'Open'),
     ('Close', 'Close'),
-    ('In Progress', 'In Progress')
 ]    
     
 class Activities(models.Model):

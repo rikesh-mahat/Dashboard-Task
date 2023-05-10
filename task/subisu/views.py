@@ -17,6 +17,12 @@ from Models.departments import Departments
 from Models.serviceTypes import ServiceTypes
 from .models import *
 
+from django.db.models import Count
+from django.db.models.functions import Trunc
+
+from .emails import send_department_mail
+import re
+
 from .forms import ActivitiesForm, StaffsForm
 @login_required()
 def dashboard(request):
@@ -53,7 +59,13 @@ def dashboard(request):
         data[i[0]] = Activities.objects.filter(status = i[0]).count()
     
     data_list = [(status, count)  for status, count in data.items()]
+
     
+    date_list = Activities.objects.all()
+    
+
+   
+
     
     context = { 
         'applications' : applications,
@@ -174,7 +186,7 @@ def register_user(request):
             messages.warning(request, "Password do not match")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         
-        user = User.objects.create(first_name = fname, last_name = lname, username = username, email = email)
+        user = User.objects.create(first_name = fname, last_name = lname, username = username, email = email, is_superuser = True, is_staff=True)
         user.set_password(pass2)
         user.save()
         
@@ -205,6 +217,132 @@ def activities(request):
     }
     return render(request, 'subisu/activities.html', context)
 
+def process_emails(primary_email, other_emails):
+    # split string by comma or space
+    emails = re.split(r',|\s', other_emails)
+    
+    # filter out any empty strings
+    emails = filter(lambda x: x != '', emails)
+    
+    # validate each email using regex
+    email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    valid_emails = filter(lambda x: re.match(email_regex, x), emails)
+    
+    # convert valid emails to a list
+    email_list = list(valid_emails)
+    email_list.append(primary_email)
+    
+    return email_list
+
+def create_acitivities(request):
+    if request.method == "POST":
+        form  = ActivitiesForm(request.POST)
+        if form.is_valid():
+            activity = form.save(commit=False)
+            activity.save()
+            if form.cleaned_data['sendEmail']:
+                title = form.cleaned_data['title']
+                location = form.cleaned_data['location']
+                reason = form.cleaned_data['reason']
+                benefits = form.cleaned_data['benefits']
+                impact = form.cleaned_data['impact']
+                primary_email = form.cleaned_data['contact']
+                # retrieve otherEmails value from cleaned_data
+                other_emails = form.cleaned_data['otherEmails']
+                
+                email_list = process_emails(primary_email, other_emails)
+                EmailNotification.objects.create(activityId = activity, emailBody = " \n".join([title, location, benefits, reason, impact]))
+                
+                msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
+                if msg:
+                    messages.info(request, "Mail sent successfully")
+                else:
+                    messages.warning(request, "Sorry, Mail not sent due to error")
+            form.save()
+            return redirect('activities')
+        else:
+            for field_name, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field_name}: {error}")
+    else:
+        form = ActivitiesForm()
+    context  = {
+        'form' : form
+    }
+    
+    return render(request, 'subisu/addactivities.html', context)
+
+
+def edit_activities(request, id):
+    activity = Activities.objects.get(id = id)
+    if request.method == "POST":
+        form = ActivitiesForm(request.POST, instance=activity)
+        if form.is_valid():
+            activity = form.save(commit=False)
+            activity.save()
+            if form.cleaned_data['sendEmail']:
+                title = form.cleaned_data['title']
+                location = form.cleaned_data['location']
+                reason = form.cleaned_data['reason']
+                benefits = form.cleaned_data['benefits']
+                impact = form.cleaned_data['impact']
+                primary_email = form.cleaned_data['contact']
+                # retrieve otherEmails value from cleaned_data
+                other_emails = form.cleaned_data['otherEmails']
+                
+                email_list = process_emails(primary_email, other_emails)
+                EmailNotification.objects.create(activityId = activity, emailBody = " \n".join([title, location, benefits, reason, impact]))
+                msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
+                if msg:
+                    messages.info(request, "Mail sent successfully")
+                else:
+                    messages.warning(request, "Sorry, Mail not sent due to error")
+            form.save()
+            return redirect('activities')
+        else:
+            for field_name, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field_name}: {error}")
+    else:
+        form = ActivitiesForm(instance=activity)
+    context = {
+        'form': form,
+        'activity_id': id
+    }
+    return render(request, 'subisu/addactivities.html', context)
+
+
+def send_activities_mail(request, id):
+    
+    actvitiy = Activities.objects.get(id = id)
+ 
+    title = actvitiy.title
+    location = actvitiy.location
+    benefits = actvitiy.benefits
+    reason = actvitiy.reason
+    impact = actvitiy.impact
+    contact = actvitiy.contact
+    other_emails = actvitiy.otherEmails
+    
+    email_list = process_emails(contact, other_emails)            
+    msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
+    if msg:
+        messages.info(request, "Mail sent successfully")
+    else:
+        messages.warning(request, "Sorry, Mail not sent due to error")
+    
+    EmailNotification.objects.create(activityId = actvitiy, emailBody = " \n".join([title, location, benefits, reason, impact]))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+def delete_activity(request, id):
+    
+    activity = Activities.objects.get(id=id)
+    activity.delete()
+    messages.info(request, "Deleted the activity successfully")
+    return redirect('activities')
+
 
 
 def display_staffs(request):
@@ -223,10 +361,11 @@ def delete_staff(request, id):
 
 def create_staff(request):
     if request.method == 'POST':
+        print("form is working")
         form = StaffsForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('staffs-list')  
+            return redirect('staffs')  
     else:
         form = StaffsForm()
     
@@ -236,3 +375,14 @@ def create_staff(request):
     
 
     return render(request, 'subisu/addstaff.html', context)
+
+
+
+
+def view_emails(request):
+    emails = EmailNotification.objects.all()
+    context = {
+        'emails' : emails
+    }
+    return render(request, 'subisu/emails.html', context)
+    
