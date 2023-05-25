@@ -25,6 +25,7 @@ import re
 
 import json
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 from .forms import ActivitiesForm, StaffsForm
 @login_required()
@@ -42,30 +43,12 @@ def dashboard(request):
     client_services = ClientServices.objects.all()
     
     
-    # for line graph getting all the counts
-    
-    # data = {
-    #             'Applications': Applications.objects.count(),
-    #             'Staffs': Staffs.objects.count(),
-    #             'Units': Units.objects.count(),
-    #             'ClientServices': ClientServices.objects.count(),
-    #             'Hosts': Hosts.objects.count(),
-    #             'Departments': Departments.objects.count(),
-    #             'ServiceTypes': ServiceTypes.objects.count(),
-    #         }
-
-    # data_list = [(model, count) for model, count in data.items()]
     
     
-    data = {}
-    for i in ACTIVITY_STATUS:
-        data[i[0]] = Activities.objects.filter(status = i[0]).count()
-    
-    data_list = [(status, count)  for status, count in data.items()]
 
     
  
- 
+    # line graph code from here
 
     start = 0
     end = 10
@@ -74,15 +57,15 @@ def dashboard(request):
 
     prev_five_days_json = json.dumps(prev_five_days)  # Convert to JSON
 
-    # # first_day = Activities.objects.filter(created__date=datetime.combine(days_list[0], datetime.min.time()))
-    # first_day = Activities.objects.filter(created__date=prev_five_days[0])
+    
 
-    print("\n\n\n\n\n\n\n")
+    
     current_date = timezone.now().date()
     # Calculate the start and end dates for the previous five days
     start_date = current_date - timedelta(days=end)
+    
     end_date = current_date - timedelta(days=start)
-
+    
     # Query the activities for the previous five days and group them by date and status
     activities_count = Activities.objects.filter(created__date__range=[start_date, end_date]) \
         .values('created__date', 'status') \
@@ -102,25 +85,21 @@ def dashboard(request):
         else:
             activities_counts_dict[date] = {status: count}
 
-    # # Print the activities counts for each day
-    # for date, counts in activities_counts_dict.items():
-    #     print(f"Date: {date}")
-    #     print(f"Open: {counts.get('Open', 0)}")
-    #     print(f"Pending: {counts.get('Pending', 0)}")
-    #     print(f"Closed: {counts.get('Close', 0)}")
-    #     print()
+    
         
     # Convert the activities counts dictionary to a JSON string
-    # Convert the activities counts dictionary to a JSON string
+    
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
+    # line graph code ends here
+    
     context = { 
         'applications' : applications,
         'client_services' : client_services,
-        'data_list' : data_list,
+        
         'xlabel' : prev_five_days_json,
         'host_counts' : host_counts,
-        'activities_counts_json': activities_counts_json,
+        'activities_counts_json': activities_counts_json,  # include this in context for line graph and then update script tag code in dashboard.html
     }
     return render(request, 'subisu/dashboard.html', context)
 
