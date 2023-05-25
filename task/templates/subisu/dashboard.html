@@ -78,42 +78,36 @@
         
         <script>
           const ctx = document.getElementById('myChart');
-        
-          new Chart(ctx, {
-            type: 'line',
-            data: {
-              labels: [{%for data in data_list%} '{{data.0}}', {%endfor%}],
-              datasets: [{
-                label: 'Numbers of data',
-                data: [{%for data in data_list%} '{{data.1}}', {%endfor%}],
-                backgroundColor : [
-                  'rgb(216, 198, 5)',
-                  'rgb(3, 169, 37)',
-                  'rgb(190, 195, 0)',
-                  'rgb(190, 100, 0)',
-                  'rgb(190, 1, 50)',
-                  'rgb(190, 150, 200)',
-                ],
-               
-                borderWidth: 2
-              }]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
-              },
-
-              plugins:{
-                  title :{
-                     display: true,
-                     text: 'Numbers'
-                  }
-              }
-            }
+          
+          const xValues = JSON.parse('{{ xlabel|safe }}');
+          const activitiesCounts = JSON.parse('{{ activities_counts_json|safe }}');
+      
+          const statusLabels = ['Open', 'Pending', 'Closed'];
+          const statusColors = ['green', 'yellow', 'red'];
+      
+          const datasets = statusLabels.map((status, index) => {
+              return {
+                  label: status,
+                  data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
+                  borderColor: statusColors[index],
+                  fill: false
+              };
           });
-        </script>
+      
+          new Chart("myChart", {
+              type: "line",
+              data: {
+                  labels: xValues,
+                  datasets: datasets
+              },
+              options: {
+                  legend: { display: true }
+              }
+          });
+      </script>
+      
+      
+      
       </div>
 
       

@@ -107,7 +107,7 @@ class Activities(models.Model):
     startTime = models.DateTimeField(null=True, blank=True, verbose_name="Activity Start Time")
     endTime = models.DateTimeField(null=True, blank=True,verbose_name="Activity End Time")
     activities = models.TextField(max_length=500, verbose_name="Activities")
-    created = models.TimeField(auto_now_add=True, verbose_name="Activity Created At")
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Activity Created At")
     otherEmails = models.TextField(blank=True, null=True, help_text="Add other emails separated by spaces", validators=[validate_email_list])
     Comment= models.CharField(max_length=200, null=True)
     status= models.CharField(max_length=20,choices=ACTIVITY_STATUS, default= 'Open')

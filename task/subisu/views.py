@@ -23,6 +23,9 @@ from django.db.models.functions import Trunc
 from .emails import send_department_mail
 import re
 
+import json
+from datetime import datetime, timedelta
+
 from .forms import ActivitiesForm, StaffsForm
 @login_required()
 def dashboard(request):
@@ -61,17 +64,63 @@ def dashboard(request):
     data_list = [(status, count)  for status, count in data.items()]
 
     
-    date_list = Activities.objects.all()
-    
+ 
+ 
 
-   
+    start = 0
+    end = 10
+    days_list = [(datetime.now() - timedelta(days=x)).date() for x in range(start, end)]
+    prev_five_days = [str(day) for day in days_list]  
 
-    
+    prev_five_days_json = json.dumps(prev_five_days)  # Convert to JSON
+
+    # # first_day = Activities.objects.filter(created__date=datetime.combine(days_list[0], datetime.min.time()))
+    # first_day = Activities.objects.filter(created__date=prev_five_days[0])
+
+    print("\n\n\n\n\n\n\n")
+    current_date = timezone.now().date()
+    # Calculate the start and end dates for the previous five days
+    start_date = current_date - timedelta(days=end)
+    end_date = current_date - timedelta(days=start)
+
+    # Query the activities for the previous five days and group them by date and status
+    activities_count = Activities.objects.filter(created__date__range=[start_date, end_date]) \
+        .values('created__date', 'status') \
+        .annotate(count=Count('id'))
+
+    # Create a dictionary to store the counts for each day
+    activities_counts_dict = {}
+
+    # Iterate over the query results and populate the dictionary
+    for activity in activities_count:
+        date = activity['created__date']
+        status = activity['status']
+        count = activity['count']
+        
+        if date in activities_counts_dict:
+            activities_counts_dict[date][status] = count
+        else:
+            activities_counts_dict[date] = {status: count}
+
+    # # Print the activities counts for each day
+    # for date, counts in activities_counts_dict.items():
+    #     print(f"Date: {date}")
+    #     print(f"Open: {counts.get('Open', 0)}")
+    #     print(f"Pending: {counts.get('Pending', 0)}")
+    #     print(f"Closed: {counts.get('Close', 0)}")
+    #     print()
+        
+    # Convert the activities counts dictionary to a JSON string
+    # Convert the activities counts dictionary to a JSON string
+    activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
+
     context = { 
         'applications' : applications,
         'client_services' : client_services,
         'data_list' : data_list,
-        'host_counts' : host_counts
+        'xlabel' : prev_five_days_json,
+        'host_counts' : host_counts,
+        'activities_counts_json': activities_counts_json,
     }
     return render(request, 'subisu/dashboard.html', context)
 
@@ -385,4 +434,24 @@ def view_emails(request):
         'emails' : emails
     }
     return render(request, 'subisu/emails.html', context)
-    
+
+
+def user_profile(request):
+    if request.method == "POST":
+        fname = request.POST.get('fname')
+        lname = request.POST.get('lname')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        
+        
+        user = User.objects.get(username = username)
+        user.first_name = fname
+        user.last_name = lname
+        user.username = username
+        user.email = email
+        user.save()
+        
+        return redirect('dashboard')
+        
+        
+    return render(request, 'subisu/profile.html')
