@@ -28,6 +28,8 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from .forms import ActivitiesForm, StaffsForm
+
+
 @login_required()
 def dashboard(request):
     
@@ -91,6 +93,8 @@ def dashboard(request):
     
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
+  
+    print(activities_counts_json)
     # line graph code ends here
     
     context = { 
@@ -184,6 +188,7 @@ def login_user(request):
 def logout_user(request):
     messages.info(request, "Thank you for using CMS. Sign in again")
     logout(request)
+    return redirect('login')
     
 
 
@@ -354,10 +359,7 @@ def send_activities_mail(request, id):
     
     email_list = process_emails(contact, other_emails)            
     msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
-    if msg:
-        messages.info(request, "Mail sent successfully")
-    else:
-        messages.warning(request, "Sorry, Mail not sent due to error")
+    
     
     EmailNotification.objects.create(activityId = actvitiy, emailBody = " \n".join([title, location, benefits, reason, impact]))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

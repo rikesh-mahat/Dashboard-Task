@@ -82,7 +82,7 @@
           const xValues = JSON.parse('{{ xlabel|safe }}');
           const activitiesCounts = JSON.parse('{{ activities_counts_json|safe }}');
       
-          const statusLabels = ['Open', 'Pending', 'Closed'];
+          const statusLabels = ['Open', 'Pending', 'Close'];
           const statusColors = ['green', 'yellow', 'red'];
       
           const datasets = statusLabels.map((status, index) => {
@@ -90,9 +90,14 @@
                   label: status,
                   data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
                   borderColor: statusColors[index],
-                  fill: false
+                  fill: false,
+                  
+                  tension: 0.2 // Adjust the tension value to control the curve
               };
           });
+
+          const dataMaxValue = Math.max(...datasets.flatMap(dataset => dataset.data));
+          const suggestedMax = dataMaxValue + 2;
       
           new Chart("myChart", {
               type: "line",
@@ -101,7 +106,16 @@
                   datasets: datasets
               },
               options: {
-                  legend: { display: true }
+                  legend: { display: true },
+                  scales: {
+                    y: {
+                      ticks: {
+                        stepSize: 1 // Set the interval between x-axis labels to 1
+                      },
+                      suggestedMin: 0, // Set the minimum value for the y-axis
+                      suggestedMax: suggestedMax // Set the maximum value for the y-axis
+                    }
+                  }
               }
           });
       </script>

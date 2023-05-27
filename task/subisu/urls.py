@@ -1,8 +1,8 @@
 from django.urls import path
 from .views import *
-
+from django.contrib.auth.decorators import login_required
 urlpatterns = [
-    path('', dashboard, name='dashboard'),
+    path('', login_required(dashboard), name='dashboard'),
     path('hosts/', hosts, name='hosts'),
     path('add-host/', add_host, name='add_host'),
     path('delete-host/<int:id>/', delete_host, name='delete_host'),
