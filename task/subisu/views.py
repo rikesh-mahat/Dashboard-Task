@@ -94,20 +94,21 @@ def dashboard(request):
     
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
-  
+    
+    
     # Retrieve the data from the model
-    client_services = ClientServices.objects.all()
+    client_services = ClientServices.objects.all()     # doughnut chart
 
     # Count the number of services based on their status
-    active_services = client_services.filter(serviceStatus=True).count()
-    inactive_services = client_services.filter(serviceStatus=False).count()
+    active_services = client_services.filter(serviceStatus=True).count() #doughnut chart
+    inactive_services = client_services.filter(serviceStatus=False).count() # doughnut chart
 
     
     print(active_services, inactive_services)
     context = {
         
-        'active_services' : active_services,
-        'inactive_services' : inactive_services,
+        'active_services' : active_services,    # doughtnut chart
+        'inactive_services' : inactive_services, # doughtnut chart
         
         'applications' : applications,
         'client_services' : client_services,
