@@ -35,18 +35,19 @@ from django.db.models import Q
 
 @login_required()
 def dashboard(request):
-    # hosts count
+    
+    
     host_counts = Hosts.objects.count()
     
-    # yoh tyo application dekhauna ko lagi hai
-    applications = Applications.objects.all()
-     
-    # client services ko lagi
+    #no. of application counts
+    application_counts =  Applications.objects.count()
+    department_counts = Departments.objects.count()   
+    applications = Applications.objects.all()  
+    unit_counts = Units.objects.all()  
     client_services = ClientServices.objects.all()
+
     
-    
-    
-    
+
     # Retrieve the start and end dates for the filter from the request
     start_date_filter = request.GET.get('start_date')
     end_date_filter = request.GET.get('end_date')
@@ -86,6 +87,11 @@ def dashboard(request):
 
 
     context = {
+        'hosts' : host_counts,
+        'application_counts' : application_counts,
+        'Department': department_counts,
+        'applications' : applications,
+        'unit_counts'  : unit_counts,
         'applications': applications,
         'client_services': client_services,
         'xlabel': json.dumps([str(day) for day in (start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1))]),
