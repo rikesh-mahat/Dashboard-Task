@@ -69,16 +69,14 @@
       </div>
 
 
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
       <div class="col-lg-12 col-md-6 mb-4">
         <div class="chart-container d-flex justify-content-center align-items-center bg-white rounded" style="position: relative; height:65vh;">
           <canvas id="myChart"></canvas>
         </div>
-        
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        
+      
         <script>
-          const ctx = document.getElementById('myChart');
-          
           const xValues = JSON.parse('{{ xlabel|safe }}');
           const activitiesCounts = JSON.parse('{{ activities_counts_json|safe }}');
       
@@ -86,44 +84,78 @@
           const statusColors = ['green', 'yellow', 'red'];
       
           const datasets = statusLabels.map((status, index) => {
-              return {
-                  label: status,
-                  data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
-                  borderColor: statusColors[index],
-                  fill: false,
-                  
-                  tension: 0.2 // Adjust the tension value to control the curve
-              };
+            return {
+              label: status,
+              data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
+              borderColor: statusColors[index],
+              fill: false,
+              tension: 0.2 // Adjust the tension value to control the curve
+            };
           });
-
+      
           const dataMaxValue = Math.max(...datasets.flatMap(dataset => dataset.data));
           const suggestedMax = dataMaxValue + 2;
       
           new Chart("myChart", {
-              type: "line",
-              data: {
-                  labels: xValues,
-                  datasets: datasets
-              },
-              options: {
-                  legend: { display: true },
-                  scales: {
-                    y: {
-                      ticks: {
-                        stepSize: 1 // Set the interval between x-axis labels to 1
-                      },
-                      suggestedMin: 0, // Set the minimum value for the y-axis
-                      suggestedMax: suggestedMax // Set the maximum value for the y-axis
-                    }
-                  }
+            type: "line",
+            data: {
+              labels: xValues,
+              datasets: datasets
+            },
+            options: {
+              legend: { display: true },
+              scales: {
+                y: {
+                  ticks: {
+                    stepSize: 1 // Set the interval between y-axis labels to 1
+                  },
+                  suggestedMin: 0, // Set the minimum value for the y-axis
+                  suggestedMax: suggestedMax // Set the maximum value for the y-axis
+                }
               }
+            }
           });
-      </script>
-      
-      
-      
+        </script>
       </div>
-
+      
+      
+      <div class="col-lg-12 col-md-6 mb-4">
+        <div class="chart-container d-flex justify-content-center align-items-center bg-white rounded" style="position: relative; height:40vh; width:50%;">
+          <canvas id="myChart-0"></canvas>
+        </div>
+      
+        <script>
+          const active = '{{active_services}}';
+          const inactive = '{{inactive_services}}';
+          
+          
+          new Chart("myChart-0", {
+            type: "doughnut",
+            data: {
+              labels: ['Inactive', 'Active'],
+              datasets: [{
+                label: 'Status',
+                data: [inactive, active],
+                backgroundColor: ['red', 'green'],
+                hoverOffset: 4
+              }]
+            },
+            options: {
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Client Services Status',
+                  font: {
+                    size: 16,
+                    weight: 'bold'
+                  }
+                }
+              }
+            }
+          });
+        </script>
+      </div>
+      
       
       <div class="row mb-4">
         <div class="col-lg-8 col-md-6 mb-md-0 mb-4">

@@ -29,6 +29,7 @@ from dateutil.relativedelta import relativedelta
 
 from .forms import ActivitiesForm, StaffsForm
 
+from django.db.models import Q
 
 @login_required()
 def dashboard(request):
@@ -94,13 +95,22 @@ def dashboard(request):
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
   
-    print(activities_counts_json)
-    # line graph code ends here
+    # Retrieve the data from the model
+    client_services = ClientServices.objects.all()
+
+    # Count the number of services based on their status
+    active_services = client_services.filter(serviceStatus=True).count()
+    inactive_services = client_services.filter(serviceStatus=False).count()
+
     
-    context = { 
+    print(active_services, inactive_services)
+    context = {
+        
+        'active_services' : active_services,
+        'inactive_services' : inactive_services,
+        
         'applications' : applications,
         'client_services' : client_services,
-        
         'xlabel' : prev_five_days_json,
         'host_counts' : host_counts,
         'activities_counts_json': activities_counts_json,  # include this in context for line graph and then update script tag code in dashboard.html
@@ -229,11 +239,20 @@ def register_user(request):
 
 
 def display_admin(request):
-    admins = User.objects.filter(is_superuser  = True)
+    keyword = request.GET.get('keyword')
+    admins = User.objects.filter(is_superuser=True)
+
+    if keyword:
+        admins = admins.filter(
+            Q(first_name__icontains=keyword) |
+            Q(last_name__icontains=keyword) |
+            Q(username__icontains=keyword) |
+            Q(email__icontains=keyword)
+        )
+
     context = {
-        'admins' : admins
+        'admins': admins
     }
-    
     
     return render(request, 'subisu/admin.html', context)
 
