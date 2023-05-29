@@ -58,8 +58,8 @@ def dashboard(request):
 
     # Calculate the start and end dates for the previous five days
     current_date = datetime.now().date()
-    start_date_default = current_date - timedelta(days=10)
-    end_date_default = current_date - timedelta(days=1)
+    start_date_default = current_date - timedelta(days=9)
+    end_date_default = current_date - timedelta(days=0)
     start_date = start_date or start_date_default
     end_date = end_date or end_date_default
     
