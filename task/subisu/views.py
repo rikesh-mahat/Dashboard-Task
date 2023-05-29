@@ -31,16 +31,15 @@ from .forms import ActivitiesForm, StaffsForm
 
 from django.db.models import Q
 
+
+
 @login_required()
 def dashboard(request):
-    
     # hosts count
-    
     host_counts = Hosts.objects.count()
     
-     # yoh tyo application dekhauna ko lagi hai
+    # yoh tyo application dekhauna ko lagi hai
     applications = Applications.objects.all()
-     
      
     # client services ko lagi
     client_services = ClientServices.objects.all()
@@ -48,28 +47,22 @@ def dashboard(request):
     
     
     
+    # Retrieve the start and end dates for the filter from the request
+    start_date_filter = request.GET.get('start_date')
+    end_date_filter = request.GET.get('end_date')
 
-    
- 
-    # line graph code from here
+    # Convert the start and end dates to datetime objects
+    start_date = datetime.strptime(start_date_filter, '%Y-%m-%d').date() if start_date_filter else None
+    end_date = datetime.strptime(end_date_filter, '%Y-%m-%d').date() if end_date_filter else None
 
-    start = 0
-    end = 10
-    days_list = [(datetime.now() - timedelta(days=x)).date() for x in range(start, end)]
-    prev_five_days = [str(day) for day in days_list]  
-
-    prev_five_days_json = json.dumps(prev_five_days)  # Convert to JSON
-
-    
-
-    
-    current_date = timezone.now().date()
     # Calculate the start and end dates for the previous five days
-    start_date = current_date - timedelta(days=end)
+    current_date = datetime.now().date()
+    start_date_default = current_date - timedelta(days=10)
+    end_date_default = current_date - timedelta(days=1)
+    start_date = start_date or start_date_default
+    end_date = end_date or end_date_default
     
-    end_date = current_date - timedelta(days=start)
-    
-    # Query the activities for the previous five days and group them by date and status
+    # Query the activities for the specified date range and group them by date and status
     activities_count = Activities.objects.filter(created__date__range=[start_date, end_date]) \
         .values('created__date', 'status') \
         .annotate(count=Count('id'))
@@ -88,34 +81,20 @@ def dashboard(request):
         else:
             activities_counts_dict[date] = {status: count}
 
-    
-        
     # Convert the activities counts dictionary to a JSON string
-    
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
-    
-    
-    # Retrieve the data from the model
-    client_services = ClientServices.objects.all()     # doughnut chart
 
-    # Count the number of services based on their status
-    active_services = client_services.filter(serviceStatus=True).count() #doughnut chart
-    inactive_services = client_services.filter(serviceStatus=False).count() # doughnut chart
-
-    
-    print(active_services, inactive_services)
     context = {
-        
-        'active_services' : active_services,    # doughtnut chart
-        'inactive_services' : inactive_services, # doughtnut chart
-        
-        'applications' : applications,
-        'client_services' : client_services,
-        'xlabel' : prev_five_days_json,
-        'host_counts' : host_counts,
-        'activities_counts_json': activities_counts_json,  # include this in context for line graph and then update script tag code in dashboard.html
+        'applications': applications,
+        'client_services': client_services,
+        'xlabel': json.dumps([str(day) for day in (start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1))]),
+        'host_counts': host_counts,
+        'activities_counts_json': activities_counts_json,
+        'start_date_filter': start_date_filter,
+        'end_date_filter': end_date_filter,
     }
+
     return render(request, 'subisu/dashboard.html', context)
 
 

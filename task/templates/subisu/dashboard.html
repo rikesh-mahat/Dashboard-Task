@@ -1,3 +1,12 @@
+<style>
+  input, button{
+    height : 38px;
+    border-radius:10px;
+  }
+  label{
+    padding-top:0.5em;
+  }
+</style>
 {%extends 'subisu/base.html'%}
  
 
@@ -69,20 +78,38 @@
       </div>
 
 
+      <div class="mb-3 d-flex justify-content-between" style="width:40%; min-width:500px">
+      <form method="GET" id="filterForm">
+        
+          <label for="startDate">Start Date:</label>
+          <input type="date" id="startDate" name="start_date"> <!-- Add the name attribute -->
+          <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="end_date"> <!-- Add the name attribute -->
+          &nbsp;<button class="btn btn-dark mt-3" onclick="applyFilter()" type="submit">Apply</button>
+        </form>
+      
+      </div>
+
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      
+      
 
       <div class="col-lg-12 col-md-6 mb-4">
         <div class="chart-container d-flex justify-content-center align-items-center bg-white rounded" style="position: relative; height:65vh;">
           <canvas id="myChart"></canvas>
         </div>
-      
+
+        
+     
         <script>
           const xValues = JSON.parse('{{ xlabel|safe }}');
           const activitiesCounts = JSON.parse('{{ activities_counts_json|safe }}');
       
           const statusLabels = ['Open', 'Pending', 'Close'];
           const statusColors = ['green', 'yellow', 'red'];
-      
+          
+
+          
           const datasets = statusLabels.map((status, index) => {
             return {
               label: status,
@@ -115,11 +142,15 @@
               }
             }
           });
-        </script>
+        </script>  
+       
+        
+        
+         
       </div>
       
       
-      <div class="col-lg-12 col-md-6 mb-4">
+      {% comment %} <div class="col-lg-12 col-md-6 mb-4">
         <div class="chart-container d-flex justify-content-center align-items-center bg-white rounded" style="position: relative; height:40vh; width:50%;">
           <canvas id="myChart-0"></canvas>
         </div>
@@ -154,7 +185,7 @@
             }
           });
         </script>
-      </div>
+      </div> {% endcomment %}
       
       
       <div class="row mb-4">
