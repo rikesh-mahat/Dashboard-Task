@@ -1,5 +1,5 @@
 <style>
-  input, button{
+  input, button, .custom-btn{
     height : 38px;
     border-radius:10px;
   }
@@ -75,11 +75,12 @@
       <div class="mb-3 d-flex justify-content-between" style="width:40%; min-width:500px">
       <form method="GET" id="filterForm">
         
-          <label for="startDate">Start Date:</label>
+          <label for="startDate">Select Date:</label>
           <input type="date" id="startDate" name="start_date"> <!-- Add the name attribute -->
-          <label for="endDate">End Date:</label>
-          <input type="date" id="endDate" name="end_date"> <!-- Add the name attribute -->
+          {% comment %} <label for="endDate">End Date:</label>
+          <input type="date" id="endDate" name="end_date"> <!-- Add the name attribute --> {% endcomment %}
           &nbsp;<button class="btn btn-dark mt-3" onclick="applyFilter()" type="submit">Apply</button>
+          <a class="btn btn-dark custom-btn mt-3" href="{%url 'dashboard'%}">Unapply Filter</a>
         </form>
       
       </div>
