@@ -86,7 +86,17 @@ def dashboard(request):
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
 
+    
+    client_services = ClientServices.objects.all()
+    active_services = client_services.filter(serviceStatus=True).count()
+    inactive_services = client_services.filter(serviceStatus=False).count()
+
+    
+    
+
     context = {
+        'active_services': active_services,
+        'inactive_services' : inactive_services,
         'hosts' : host_counts,
         'application_counts' : application_counts,
         'Department': department_counts,
