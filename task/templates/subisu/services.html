@@ -1,0 +1,59 @@
+{%extends 'subisu/base.html' %}
+
+
+{%block start%}
+
+<div class="d-flex justify-content-end  px-6">
+  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'add_host' %}">
+    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+    <span class="btn-inner--text">Add Hosts</span>
+  </a>
+</div>
+
+{% comment %} class Applications(models.Model):
+    name = models.CharField(max_length=200)
+    url = models.URLField(max_length=500)
+    devLanguage = models.CharField(max_length=200)
+    sourceCode = models.CharField(max_length=200, choices=SOURCE_CODE_OPTIONS)
+    serverAccess = models.CharField(max_length=50)
+    serverControl = models.CharField(max_length=150, choices=SERVER_CONTROL_OPTIONS)
+    hostId = models.ForeignKey(Hosts, on_delete=models.PROTECT, null=True, blank=True) {% endcomment %}
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+        
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Name</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">URL</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Development Language</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Source Code</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Server Access</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Server Control</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Host</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for application in applications %}
+            <tr>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{application.name}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs"><a href="{{application.url}}">{{ application.url | truncatechars:100}}</a></h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.devLanguage }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.sourceCode}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.serverAccess }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.serverControl }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.hostId }}</h6></td>
+             
+            </tr>
+        {% endfor %}
+
+
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}

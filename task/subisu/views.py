@@ -90,9 +90,14 @@ def dashboard(request):
     client_services = ClientServices.objects.all()
     active_services = client_services.filter(serviceStatus=True).count()
     inactive_services = client_services.filter(serviceStatus=False).count()
-
+    client_services_count = client_services.count()
     
-    
+    more_info_dict = {
+        'Hosts' : host_counts,
+        'Applications' : application_counts,
+        'Client Services' : client_services_count
+        
+    }
 
     context = {
         'active_services': active_services,
@@ -109,6 +114,7 @@ def dashboard(request):
         'activities_counts_json': activities_counts_json,
         'start_date_filter': start_date_filter,
         'end_date_filter': end_date_filter,
+        'info' : more_info_dict
     }
 
     return render(request, 'subisu/dashboard.html', context)
@@ -451,3 +457,14 @@ def user_profile(request):
         
         
     return render(request, 'subisu/profile.html')
+
+
+
+
+def applications(request):
+    applications = Applications.objects.all()
+    context = {
+        'applications' : applications
+    }
+
+    return render(request, 'subisu/applications.html', context)

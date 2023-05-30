@@ -20,5 +20,6 @@ urlpatterns = [
     path('edit-activity/<int:id>/', edit_activities, name='edit_activity'),
     path('send-activities-mail/<int:id>/', send_activities_mail, name='activities_mail'),
     path('email/', view_emails, name='emails'),
-    path('profile/', user_profile, name='profile')
+    path('profile/', user_profile, name='profile'),
+    path('applications/', applications, name='applications')
 ]
