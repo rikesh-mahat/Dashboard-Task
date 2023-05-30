@@ -207,13 +207,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    {% comment %} name = models.CharField(max_length=200)
-                    url = models.URLField(max_length=500)
-                    devLanguage = models.CharField(max_length=200)
-                    sourceCode = models.CharField(max_length=200, choices=SOURCE_CODE_OPTIONS)
-                    serverAccess = models.CharField(max_length=50)
-                    serverControl = models.CharField(max_length=150, choices=SERVER_CONTROL_OPTIONS)
-                    hostId = models.ForeignKey(Hosts, on_delete=models.PROTECT, null=True, blank=True) {% endcomment %}
+       
                     
                     {%for app in applications %}
                     <tr>
@@ -264,36 +258,50 @@
         <div class="col-lg-4 col-md-6">
           <div class="card h-100">
             <div class="card-header pb-0">
-              <h6>Services</h6>
-              <p class="text-sm mb-0">
-                    
-                <span class="font-weight-bold ms-1">Total : {{client_services.count}}</span> 
-              </p>
+              <h6>Informations</h6>
+             
             </div>
-            <div class="card-body p-3">
-              <div class="timeline timeline-one-side">
-                {%if client_services.count%}
-                {%for service in client_services%}
-              
-                <div class="timeline-block">
-                  <span class="timeline-step">
-                    <i class="material-icons text-dark text-gradient">payment</i>
-                  </span>
-                  <div class="timeline-content">
-                    <h6 class="text-dark text-sm font-weight-bold mb-0">{{service.domainName}} <span class=" text-secondary text-xs font-weight-bolder opacity-7"> | Host - {{service.hostId.hostname}} </span></h6>
-                    <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">Created on: {{service.serviceCreatedDate | date}}</p>
-                  </div>
-                </div>
-              </div>
-              {%endfor%}
-              {%else%}
-              <div class="timeline-block">
-                <div class="timeline-content">
-                  <h6 class="text-dark text-sm font-weight-bold mb-0">No Services Registered</h6>
-                  
-                </div>
-              </div>
-              {%endif%}
+            <div class="card-body p-3 border">
+            
+              <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Faculty</th>
+                      <th class="text-uppercase text-secondary text-xs font-weight-bolder opacity-7 ps-2">Count</th>
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+       
+                  {%for key, value in info.items%}  
+   
+                    <tr>
+
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-xs font-weight-bolder">{{key}}</h6>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <div class="d-flex flex-column justify-content-center">
+                            <a href="{{app.url}}" class="mb-0 text-xs font-weight-bolder">{{value}}</a>
+                          </div>
+                        </div>
+                      </td>
+
+                     
+  
+                    </tr>
+                  {%endfor%}
+                  </tbody>
+                </table>
+             
+
             </div>
           </div>
         </div>
