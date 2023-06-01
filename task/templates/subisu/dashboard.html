@@ -6,6 +6,22 @@
   label{
     padding-top:0.5em;
   }
+
+  .custom-select-button {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #344464;
+    color: #fff;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+  }
+
+ 
+  
+  
 </style>
 {%extends 'subisu/base.html'%}
  
@@ -71,26 +87,61 @@
         </div>
       </div>
 
-
-      <div class="mb-3 d-flex justify-content-between" style="width:40%; min-width:500px">
-      <form method="GET" id="filterForm" class="px-3">
-        
-          <label for="startDate">Select Date:</label>
-          <input type="date" id="startDate" name="start_date"> <!-- Add the name attribute -->
-          {% comment %} <label for="endDate">End Date:</label>
-          <input type="date" id="endDate" name="end_date"> <!-- Add the name attribute --> {% endcomment %}
-          &nbsp;<button class="btn btn-dark mt-3" onclick="applyFilter()" type="submit">Apply</button>
-          <a class="btn btn-dark custom-btn mt-3" href="{%url 'dashboard'%}">Unapply Filter</a>
-        </form>
       
-      </div>
+      <div class="col-md-3 border">
+        <form method="GET" id="filterForm" class="px-3">
+          <div class="form-group d-flex align-items-center">
+            <label for="startDate" class="mr-2">Select Date:</label>
+            <input type="date" id="startDate" name="start_date" class="form-control border px-5">
+          </div>
+          <!-- Uncomment this section if you want to include an end date input field -->
+          <!-- <div class="form-group">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="end_date" class="form-control">
+          </div> -->
+      
+  
 
+        
+              <div class="form-group">
+
+                
+                <select id="filterOption" name="filter_option" class="custom-select-button">
+                  <option value="today" {% if selected_option == 'today' %} selected {% endif %}>Today</option>
+                  <option value="this_week" {% if selected_option == 'this_week' %} selected {% endif %}>This week</option>
+                  <option value="last_week" {% if selected_option == 'last_week' %} selected {% endif %}>Last week</option>
+                  <option value="this_month" {% if selected_option == 'this_month' %} selected {% endif %}>This month</option>
+                </select>
+                
+           
+
+        
+    
+                <button class="btn btn-dark mt-3" onclick="applyFilter()" type="submit">Apply</button>
+                <a class="btn btn-dark custom-btn mt-3" href="{% url 'dashboard' %}">Unapply Filter</a>
+              </div>
+       
+           
+       
+        </form>
+      </div>
+      
+     
+        
+
+      
+      
+      
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       
       
-    <div class="row">
+    <div class="row px-3">
 
       <div class="col-lg-9 col-md-6 mb-4">
+
+        
+
+
         <div class="chart-container d-flex justify-content-center align-items-center bg-white rounded" style="position: relative; height:60vh;">
           <canvas id="myChart"></canvas>
         </div>
@@ -306,7 +357,6 @@
           </div>
         </div>
       </div>
-
 
 
 

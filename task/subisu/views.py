@@ -52,14 +52,37 @@ def dashboard(request):
     start_date_filter = request.GET.get('start_date')
     end_date_filter = request.GET.get('end_date')
 
+    
     # Convert the start and end dates to datetime objects
     start_date = datetime.strptime(start_date_filter, '%Y-%m-%d').date() if start_date_filter else None
+    
     end_date = datetime.strptime(end_date_filter, '%Y-%m-%d').date() if end_date_filter else None
 
-    # Calculate the start and end dates for the previous five days
     current_date = datetime.now().date()
+    
+    filter_option = request.GET.get('filter_option')
+    
+    
+   
+    print(f"\n\n\n{filter_option}\n\n\n")
+       
+    if filter_option == "today":
+        start_date = current_date - timedelta(days=0)
+    elif filter_option == "this_week":
+        start_date = current_date - timedelta(days=7)
+    elif filter_option == "last_week":
+        start_date = current_date - timedelta(days=14)
+        end_date = current_date - timedelta(days=7)
+    else:
+        start_date = datetime(datetime.now().year, datetime.now().month, 1).date()
+        print(f"\n\n\n{start_date}\n\n\n")
+    # Calculate the start and end dates for the previous five days
+    
     start_date_default = current_date - timedelta(days=9)
     end_date_default = current_date - timedelta(days=0)
+    
+    
+    
     start_date = start_date or start_date_default
     end_date = end_date or end_date_default
     
@@ -85,11 +108,13 @@ def dashboard(request):
     # Convert the activities counts dictionary to a JSON string
     activities_counts_json = json.dumps({str(date): counts for date, counts in activities_counts_dict.items()})
 
-
+    
+        
     
     client_services = ClientServices.objects.all()
     active_services = client_services.filter(serviceStatus=True).count()
     inactive_services = client_services.filter(serviceStatus=False).count()
+    
     client_services_count = client_services.count()
     
     more_info_dict = {
@@ -114,7 +139,8 @@ def dashboard(request):
         'activities_counts_json': activities_counts_json,
         'start_date_filter': start_date_filter,
         'end_date_filter': end_date_filter,
-        'info' : more_info_dict
+        'info' : more_info_dict,
+        'selected_option' : filter_option
     }
 
     return render(request, 'subisu/dashboard.html', context)
