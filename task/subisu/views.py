@@ -494,9 +494,22 @@ def user_profile(request):
 
 
 def applications(request):
+    
     applications = Applications.objects.all()
     context = {
         'applications' : applications
     }
 
+    return render(request, 'subisu/applications.html', context)
+
+
+
+def host_application_services(request, id):
+    host = Hosts.objects.get(id  = id)
+    applications = Applications.objects.filter(hostId = host)
+
+    context = {
+        'applications' : applications
+    }
+    
     return render(request, 'subisu/applications.html', context)

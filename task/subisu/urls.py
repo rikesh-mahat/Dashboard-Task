@@ -21,5 +21,6 @@ urlpatterns = [
     path('send-activities-mail/<int:id>/', send_activities_mail, name='activities_mail'),
     path('email/', view_emails, name='emails'),
     path('profile/', user_profile, name='profile'),
-    path('applications/', applications, name='applications')
+    path('applications/', applications, name='applications'),
+    path('application/<int:id>/', host_application_services , name="application")
 ]
