@@ -25,7 +25,7 @@ import re
 
 import json
 from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
+
 
 from .forms import ActivitiesForm, StaffsForm
 
@@ -64,7 +64,6 @@ def dashboard(request):
     
     
    
-    print(f"\n\n\n{start_date}\n\n\n")
     
     if start_date is None and filter_option != "filter":
         print("this condition is true")
@@ -119,12 +118,17 @@ def dashboard(request):
     
     client_services_count = client_services.count()
     
-    more_info_dict = {
-        'Hosts' : host_counts,
-        'Applications' : application_counts,
-        'Client Services' : client_services_count
+    # more_info_dict = {
+    #     'Hosts' : host_counts,
+    #     'Applications' : application_counts,
+    #     'Client Services' : client_services_count
         
-    }
+    # }
+    
+    
+    print("\tHostName \tApplication Count \tService Count")
+    for host in Hosts.objects.all():
+        print(f"\t{host.hostname}\t{host.applications_set.count()}\t{host.clientservices_set.count()}")
 
     context = {
         'active_services': active_services,
@@ -141,8 +145,8 @@ def dashboard(request):
         'activities_counts_json': activities_counts_json,
         'start_date_filter': start_date_filter,
         'end_date_filter': end_date_filter,
-        'info' : more_info_dict,
-        'selected_option' : filter_option
+        'selected_option' : filter_option,
+        'total_host' : Hosts.objects.all()
     }
 
     return render(request, 'subisu/dashboard.html', context)
