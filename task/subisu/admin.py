@@ -10,7 +10,7 @@ from Models.departments import Departments
 from Models.staffs import Staffs
 from Models.serviceTypes import ServiceTypes
 
-from import_export.admin import ImportExportModelAdmin
+# from import_export.admin import ImportExportModelAdmin
 
 admin.site.register([Priviliges, Applications, Hosts, ClientServices, Departments, Staffs, ServiceTypes])
 
@@ -38,7 +38,7 @@ class ActivityInline(admin.StackedInline):
     model = ActivityTable
     extra = 0
 
-class HostActivities(ImportExportModelAdmin,admin.ModelAdmin):
+class HostActivities(admin.ModelAdmin):
     list_display = ('id', 'title', 'ETA','startTime', 'endTime', 'created')
     inlines = [ActivityInline]
     

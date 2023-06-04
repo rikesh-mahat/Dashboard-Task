@@ -64,18 +64,20 @@ def dashboard(request):
     
     
    
-    print(f"\n\n\n{filter_option}\n\n\n")
-       
-    if filter_option == "today":
-        start_date = current_date - timedelta(days=0)
-    elif filter_option == "this_week":
-        start_date = current_date - timedelta(days=7)
-    elif filter_option == "last_week":
-        start_date = current_date - timedelta(days=14)
-        end_date = current_date - timedelta(days=7)
-    else:
-        start_date = datetime(datetime.now().year, datetime.now().month, 1).date()
-        print(f"\n\n\n{start_date}\n\n\n")
+    print(f"\n\n\n{start_date}\n\n\n")
+    
+    if start_date is None and filter_option != "filter":
+        print("this condition is true")
+        if filter_option == "today":
+            start_date = current_date - timedelta(days=0)
+        elif filter_option == "this_week":
+            start_date = current_date - timedelta(days=7)
+        elif filter_option == "last_week":
+            start_date = current_date - timedelta(days=14)
+            end_date = current_date - timedelta(days=7)
+        else:
+            start_date = datetime(datetime.now().year, datetime.now().month, 1).date()
+        
     # Calculate the start and end dates for the previous five days
     
     start_date_default = current_date - timedelta(days=9)

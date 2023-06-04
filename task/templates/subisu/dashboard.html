@@ -107,6 +107,7 @@
 
 
                 <select id="filterOption" name="filter_option" class="custom-select-button">
+                  <option value="filter" {% if selected_option == 'filter' %} selected {% endif %}>Filter Option</option>
                   <option value="today" {% if selected_option == 'today' %} selected {% endif %}>Today</option>
                   <option value="this_week" {% if selected_option == 'this_week' %} selected {% endif %}>This week</option>
                   <option value="last_week" {% if selected_option == 'last_week' %} selected {% endif %}>Last week</option>
