@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'subisu',
     'Models',
-    'import_export'
+    
 ]
 
 MIDDLEWARE = [

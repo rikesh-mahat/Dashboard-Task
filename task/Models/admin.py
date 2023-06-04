@@ -1,11 +1,12 @@
 from Models.units import Units
-from import_export.admin import ImportExportModelAdmin
+
 from django.contrib import admin
 from Models.application_access import ApplicationAccess
 
 @admin.register(Units)
-class AdminUnit(ImportExportModelAdmin):
+class AdminUnit(admin.ModelAdmin):
     list_display = ['name', 'departmentId', 'unitHead', 'email']
+
     
 @admin.register(ApplicationAccess)
 class ApplicationAccessAdmin(admin.ModelAdmin):
