@@ -17,8 +17,8 @@
   <!-- Nucleo Icons -->
   <link href="{% static 'assets/css/nucleo-icons.css' %}" rel="stylesheet" />
   <link href="{% static 'assets/css/nucleo-svg.css' %}" rel="stylesheet" />
-  <!-- Font Awesome Icons -->
-  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+ 
+  
   <!-- Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
@@ -29,15 +29,60 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 
   
- 
+  <script src="https://kit.fontawesome.com/8eac1c702f.js" crossorigin="anonymous"></script>
 
- 
+    <style>
+      .sidenav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 250px; /* Change initial width to 250px */
+        background-color: #12171e;
+        transition: all 0.5s ease;
+        border-radius: 0 10px 10px 0;
+      }
+      
+      .sidenav.active {
+        width: 80px; /* Change toggled width to 80px */
+      }
+      
+      .sidenav.active ~ .main-content {
+        margin-left: 80px; /* Change margin-left to match toggled width */
+      }
+      
+      /* Main navigation styles */
+      .main-content {
+        transition: all 0.5s ease;
+        margin-left: 250px; /* Change initial margin-left to 250px */
+      }
+      
+      .sidenav.active ~ .main-content {
+        margin-left: 80px; /* Change margin-left to match toggled width */
+      }
+
+      @media (max-width: 991.98px) {
+        .sidenav {
+          display: visible;
+        }
+      
+        .main-content {
+          margin-left: 0;
+        }
+      
+        .sidenav.active ~ .main-content {
+          margin-left: 0;
+        }
+      }
+      
+    
+    </style>
 
 </head>
 
 <body class="g-sidenav-show bg-gray-200">
   {% include 'subisu/sidenav.html' %}
-  {% include 'subisu/mainnav.html' %}
+  {% include 'subisu/mainnav.html' %} 
 
   {% block start %}
   {% endblock %}
@@ -46,5 +91,31 @@
 
   
 </body>
+<script>
+  // JavaScript code
+  document.addEventListener("DOMContentLoaded", function() {
+    let btn = document.querySelector('#btn');
+    let sidebar = document.querySelector('.sidenav');
+  
+    // Check if sidebar state is stored in local storage
+    const sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'active') {
+      sidebar.classList.add('active');
+    }
+  
+    btn.onclick = function() {
+      sidebar.classList.toggle('active');
+      // Store the sidebar state in local storage
+      if (sidebar.classList.contains('active')) {
+        localStorage.setItem('sidebarState', 'active');
+      } else {
+        localStorage.setItem('sidebarState', 'inactive');
+      }
+    };
+  });
+  
+
+ 
+</script>
 
 </html>
