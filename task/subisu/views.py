@@ -27,7 +27,7 @@ import json
 from datetime import datetime, timedelta
 
 
-from .forms import ActivitiesForm, StaffsForm
+from .forms import *
 
 from django.db.models import Q
 
@@ -126,10 +126,7 @@ def dashboard(request):
     # }
     
     
-    print("\tHostName \tApplication Count \tService Count")
-    for host in Hosts.objects.all():
-        print(f"\t{host.hostname}\t{host.applications_set.count()}\t{host.clientservices_set.count()}")
-
+  
     context = {
         'active_services': active_services,
         'inactive_services' : inactive_services,
@@ -513,3 +510,55 @@ def host_application_services(request, id):
     }
     
     return render(request, 'subisu/applications.html', context)
+
+
+
+def poa(request):
+    
+    # activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
+    # fieldEngineer = models.ManyToManyField(Staffs, blank=True, verbose_name="Select Field Engineers")
+    # poaDetails = models.TextField(max_length=250, verbose_name="POA Details")
+    # poaEntry = models.TimeField(auto_now_add=True, verbose_name="POA Entry")
+    # sendEmail = models.BooleanField(default=True)
+    # units = models.ManyToManyField(Units, blank=True, verbose_name="Send emails to Units")
+    
+    poa = Poa.objects.all()
+    context = {
+        'poas' : poa,
+    }
+    return render(request, 'subisu/poa.html', context)
+
+
+
+
+def create_poa(request):
+    activities = Activities.objects.filter(Q(status=ACTIVITY_STATUS[0][0]) | Q(status=ACTIVITY_STATUS[1][0]))
+    field_engineers = Staffs.objects.filter(status=True)
+    units = Units.objects.filter(status=True)
+    if request.method == 'POST':
+        activity_id = request.POST.get('activity_id')
+        activity = Activities.objects.get(id=activity_id)
+        selected_engineer_ids = request.POST.getlist('field_engineer[]')
+        selected_field_engineers = Staffs.objects.filter(id__in=selected_engineer_ids)
+        poa_details = request.POST.get('poa_details')
+        send_email = 'send_email' in request.POST
+        selected_unit_ids = request.POST.getlist('units[]')
+        selected_units = Units.objects.filter(id__in=selected_unit_ids)
+        entry_time = datetime.now().time()
+
+        print(activity, selected_field_engineers, poa_details, selected_units, entry_time)
+        poa = Poa(activityId=activity, poaDetails=poa_details, sendEmail=send_email, poaEntry=entry_time)
+        poa.save()
+        poa.fieldEngineer.set(selected_field_engineers)
+        poa.units.set(selected_units)
+
+    context = {
+        'activities': activities,
+        'field_engineers': field_engineers,
+        'units': units
+    }
+
+    return render(request, 'subisu/create_poa.html', context)
+
+
+    

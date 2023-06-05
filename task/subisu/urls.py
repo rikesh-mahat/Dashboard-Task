@@ -22,5 +22,7 @@ urlpatterns = [
     path('email/', view_emails, name='emails'),
     path('profile/', user_profile, name='profile'),
     path('applications/', applications, name='applications'),
-    path('application/<int:id>/', host_application_services , name="application")
+    path('application/<int:id>/', host_application_services , name="application"),
+    path('poa/', poa, name='poa'),
+    path('create-poa/', create_poa, name='create_poa')
 ]

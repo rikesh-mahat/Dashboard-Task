@@ -51,3 +51,16 @@ class StaffsForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'class': 'form-control'}),   
         }   
         
+
+
+class PoaForm(forms.ModelForm):
+    class Meta:
+        model = Poa
+        fields = '__all__'
+        widgets = {
+            'activityId': forms.Select(attrs={'class': 'form-control'}),
+            'fieldEngineer': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+            'poaDetails': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'units': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+            'sendEmail': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

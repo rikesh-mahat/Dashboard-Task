@@ -1,0 +1,57 @@
+{%extends 'subisu/base.html' %}
+
+
+{%block start%}
+
+<div class="d-flex justify-content-end  px-6 py-3" >
+  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'create_poa' %}">
+    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+    <span class="btn-inner--text">Create POA</span>
+  </a>
+</div>
+
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+            
+
+            {% comment %} # activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
+            # fieldEngineer = models.ManyToManyField(Staffs, blank=True, verbose_name="Select Field Engineers")
+            # poaDetails = models.TextField(max_length=250, verbose_name="POA Details")
+            # poaEntry = models.TimeField(auto_now_add=True, verbose_name="POA Entry")
+            # sendEmail = models.BooleanField(default=True)
+            # units = models.ManyToManyField(Units, blank=True, verbose_name="Send emails to Units") {% endcomment %}
+
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Activity</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Field Engineers</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Details</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Entry</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Units</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">SendMail</th>
+            
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for poa in poas %}
+            <tr>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ poa.activityId.title }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{%for engineer in poa.fieldEngineer.all%}{{engineer.firstName}} {{engineer.lastName}} {%endfor%}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ poa.poaDetails }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ poa.poaEntry }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{% for unit in poa.units.all%} {{ unit.name }}{%endfor%}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ poa.sendEmail }}</h6></td>
+         
+            </tr>
+        {% endfor %}
+
+
+       
+      </tbody>
+    </table>
+  </div>
+</div>
+{%endblock%}
