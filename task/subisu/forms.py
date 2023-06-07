@@ -2,6 +2,8 @@ from django import forms
 from Models.departments import Departments
 from .models import *
 from Models.staffs import Staffs
+
+from django_flatpickr.widgets import DatePickerInput, TimePickerInput, DateTimePickerInput
 class DepartmentsForm(forms.ModelForm):
     class Meta:
         model = Departments
@@ -25,14 +27,14 @@ class ActivitiesForm(forms.ModelForm):
             'benefits': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'impact': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'contact': forms.Select(attrs={'class': 'form-control'}),
-            'startTime': forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input', 'data-target' : '#datetimepicker1'}),
-            'endTime': forms.DateTimeInput(attrs={'class': 'form-control datetimepicker-input', 'data-target' : '#datetimepicker2'}),
+            'startTime': DateTimePickerInput(),
+            'endTime': DateTimePickerInput(),
             'activities': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'otherEmails': forms.TextInput(attrs={'class': 'form-control'}),
             'Comment': forms.TextInput(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
-            
         }
+
 
         
         

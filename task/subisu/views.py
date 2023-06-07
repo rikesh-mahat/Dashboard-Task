@@ -317,31 +317,28 @@ def process_emails(primary_email, other_emails):
     
     return email_list
 
+
 def create_acitivities(request):
     if request.method == "POST":
-        form  = ActivitiesForm(request.POST)
+        form = ActivitiesForm(request.POST)
         if form.is_valid():
             activity = form.save(commit=False)
             activity.save()
-            if form.cleaned_data['sendEmail']:
+            if 'send_email' in form.cleaned_data and form.cleaned_data['send_email']:
                 title = form.cleaned_data['title']
                 location = form.cleaned_data['location']
                 reason = form.cleaned_data['reason']
                 benefits = form.cleaned_data['benefits']
                 impact = form.cleaned_data['impact']
                 primary_email = form.cleaned_data['contact']
-                # retrieve otherEmails value from cleaned_data
                 other_emails = form.cleaned_data['otherEmails']
-                
                 email_list = process_emails(primary_email, other_emails)
-                EmailNotification.objects.create(activityId = activity, emailBody = " \n".join([title, location, benefits, reason, impact]))
-                
-                msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
+                EmailNotification.objects.create(activityId=activity, emailBody="\n".join([title, location, benefits, reason, impact]))
+                msg = send_department_mail(title, "time", location, reason, benefits, impact, email_list)
                 if msg:
                     messages.info(request, "Mail sent successfully")
                 else:
-                    messages.warning(request, "Sorry, Mail not sent due to error")
-            form.save()
+                    messages.warning(request, "Sorry, Mail not sent due to an error")
             return redirect('activities')
         else:
             for field_name, errors in form.errors.items():
@@ -349,11 +346,20 @@ def create_acitivities(request):
                     messages.error(request, f"{field_name}: {error}")
     else:
         form = ActivitiesForm()
-    context  = {
-        'form' : form
+
+    activities = Activities.objects.filter(Q(status=ACTIVITY_STATUS[0][0]) | Q(status=ACTIVITY_STATUS[1][0]))
+    field_engineers = Staffs.objects.filter(status=True)
+    units = Units.objects.filter(status=True)
+
+    context = {
+        'form': form,
+        'activities': activities,
+        'field_engineers': field_engineers,
+        'units': units
     }
-    
+
     return render(request, 'subisu/addactivities.html', context)
+
 
 
 def edit_activities(request, id):
@@ -535,6 +541,7 @@ def create_poa(request):
     activities = Activities.objects.filter(Q(status=ACTIVITY_STATUS[0][0]) | Q(status=ACTIVITY_STATUS[1][0]))
     field_engineers = Staffs.objects.filter(status=True)
     units = Units.objects.filter(status=True)
+    
     if request.method == 'POST':
         activity_id = request.POST.get('activity_id')
         activity = Activities.objects.get(id=activity_id)
@@ -546,12 +553,15 @@ def create_poa(request):
         selected_units = Units.objects.filter(id__in=selected_unit_ids)
         entry_time = datetime.now().time()
 
-        print(activity, selected_field_engineers, poa_details, selected_units, entry_time)
+        # Create POA object and save the data
         poa = Poa(activityId=activity, poaDetails=poa_details, sendEmail=send_email, poaEntry=entry_time)
         poa.save()
         poa.fieldEngineer.set(selected_field_engineers)
         poa.units.set(selected_units)
-
+        
+        # Redirect to the appropriate view after POA form submission
+        return redirect('activities')  # Replace 'activities' with the desired view name
+    
     context = {
         'activities': activities,
         'field_engineers': field_engineers,
@@ -561,4 +571,6 @@ def create_poa(request):
     return render(request, 'subisu/create_poa.html', context)
 
 
+    
+    
     

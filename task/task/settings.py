@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'subisu',
     'Models',
-    'fontawesomefree'
+    'fontawesomefree',
+    'django_flatpickr'
 ]
 
 MIDDLEWARE = [

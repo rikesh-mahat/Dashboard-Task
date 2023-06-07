@@ -155,42 +155,46 @@
       
           const statusLabels = ['Open', 'Pending', 'Close'];
           const statusColors = ['green', 'yellow', 'red'];
-          
-
-          
+      
           const datasets = statusLabels.map((status, index) => {
-            return {
-              label: status,
-              data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
-              borderColor: statusColors[index],
-              fill: false,
-              tension: 0.2 // Adjust the tension value to control the curve
-            };
+              return {
+                  label: status,
+                  data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
+                  backgroundColor: statusColors[index], // Set the background color for each bar
+                  borderColor: 'white', // Optional: Set the border color for each bar
+                  borderWidth: 1, // Optional: Set the border width for each bar
+                  barPercentage: 0.7 // Optional: Adjust the width of each bar (0.0 - 1.0)
+              };
           });
       
           const dataMaxValue = Math.max(...datasets.flatMap(dataset => dataset.data));
           const suggestedMax = dataMaxValue + 2;
       
           new Chart("myChart", {
-            type: "line",
-            data: {
-              labels: xValues,
-              datasets: datasets
-            },
-            options: {
-              legend: { display: true },
-              scales: {
-                y: {
-                  ticks: {
-                    stepSize: 1 // Set the interval between y-axis labels to 1
+              type: "bar",
+              data: {
+                  labels: xValues,
+                  datasets: datasets
+              },
+              options: {
+                  plugins: {
+                      legend: {
+                          display: true
+                      }
                   },
-                  suggestedMin: 0, // Set the minimum value for the y-axis
-                  suggestedMax: suggestedMax // Set the maximum value for the y-axis
-                }
+                  scales: {
+                      y: {
+                          ticks: {
+                              stepSize: 1,
+                              beginAtZero: true // Start the y-axis at 0
+                          },
+                          suggestedMax: suggestedMax
+                      }
+                  }
               }
-            }
           });
-        </script>  
+      </script>
+      
        
       </div>
         
