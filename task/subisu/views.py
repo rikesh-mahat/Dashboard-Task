@@ -320,9 +320,18 @@ def process_emails(primary_email, other_emails):
 
 def create_acitivities(request):
     if request.method == "POST":
+        context = {}
         form = ActivitiesForm(request.POST)
         if form.is_valid():
             activity = form.save(commit=False)
+            start_time = form.cleaned_data['startTime']
+            end_time = form.cleaned_data['endTime']
+            
+            if end_time < start_time:
+                messages.warning(request, "End time cannot be earlier than start time")
+                context['form'] = form
+                return render(request, 'subisu/addactivities.html', context)
+            
             activity.save()
             if 'send_email' in form.cleaned_data and form.cleaned_data['send_email']:
                 title = form.cleaned_data['title']
@@ -339,7 +348,7 @@ def create_acitivities(request):
                     messages.info(request, "Mail sent successfully")
                 else:
                     messages.warning(request, "Sorry, Mail not sent due to an error")
-            return redirect('activities')
+            return redirect('create_poa')
         else:
             for field_name, errors in form.errors.items():
                 for error in errors:

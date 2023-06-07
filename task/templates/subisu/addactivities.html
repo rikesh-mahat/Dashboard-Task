@@ -11,86 +11,37 @@
                     {% csrf_token %}
                     {{ form.media }}  {# Include form's media files #}
                     {% for field in form %}
-                        <div class="input-group input-group-static mb-4">
+                        <div class="input-group input-group-static mb-4 ">
                             {{ field.label_tag }}
                             {% if field.name == 'startTime' or field.name == 'endTime' %}
-                                <input type="text" class="form-control flatpickr datetimepicker" name="{{ field.name }}" />
+                                <input type="text" class="form-control flatpickr datetimepicker" name="{{ field.name }}" data-close-on-select="true" />
                             {% else %}
                                 {{ field }}
                             {% endif %}
                         </div>
-                        {% if field.name == 'activityId' %}
-                            <div class="poa-form">
-                                <h4 class="card-title text-center">POA Form</h4>
-                                <div class="input-group input-group-static mb-4">
-                                    <label for="id_activity_id">Select Activity</label>
-                                    <select id="id_activity_id" name="activity_id" class="form-control">
-                                        {% for activity in activities %}
-                                            <option value="{{ activity.id }}">{{ activity.title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label>Select Field Engineers</label><br>
-                                    {% for field_engineer in field_engineers %}
-                                        <div class="form-check form-check-inline">
-                                            <input type="checkbox" name="field_engineer[]"
-                                                value="{{ field_engineer.id }}" class="form-check-input">
-                                            <label class="form-check-label">{{ field_engineer.firstName }} {% if field_engineer.middleName %} {{ field_engineer.middleName }} {% endif %} {{ field_engineer.lastName }}</label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="input-group input-group-static mb-4">
-                                    <label for="id_poa_details">POA Details</label>
-                                    <textarea id="id_poa_details" name="poa_details" class="form-control"
-                                        rows="3"></textarea>
-                                </div>
-                                <div class="input-group input-group-static mb-4">
-                                    <label>Select Units</label><br>
-                                    {% for unit in units %}
-                                        <div class="form-check form-check-inline">
-                                            <input type="checkbox" name="units[]" value="{{ unit.id }}"
-                                                class="form-check-input">
-                                            <label class="form-check-label">{{ unit.name }}</label>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label for="id_send_email" class="form-check-label">Send Emails:</label>
-                                    <input type="checkbox" id="id_send_email" name="send_email"
-                                        class="form-check-input send-email" style="border:0.3px solid grey;"> Yes
-                                </div>
-                            </div>
-                        {% endif %}
                     {% endfor %}
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-success">Save</button>
-                        <a class="btn btn-outline-secondary" href="{% url 'activities' %}">Cancel</a>
-                      </div>
-                    </form>
-                </div>
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a class="btn btn-outline-secondary" href="{% url 'activities' %}">Cancel</a>
+                </form>
             </div>
         </div>
     </div>
-    
-    <script>
-      $(function () {
-        $(".flatpickr").flatpickr({
-          enableTime: true,
-          dateFormat: 'Y-m-d H:i',
-          // Add any other options you need
-        });
-      
-        $(".poa-form").hide();
-      
-        $("#id_activity_id").change(function () {
-          if ($(this).val() !== "") {
-            $(".poa-form").show();
-          } else {
-            $(".poa-form").hide();
-          }
-        });
-      });
-    </script>
-    {% endblock %}
-    
+</div>
+
+<script>
+  $(function () {
+    $(".flatpickr").flatpickr({
+      enableTime: true,
+      dateFormat: 'Y-m-d H:i',
+      allowInput: false, // Disable manual input
+      defaultDate: "{{ selected_date }}", // Replace with the selected date value
+      // Add any other options you need
+      onChange: function(selectedDates, dateStr, instance) {
+        if (selectedDates.length > 0) {
+          instance.close();
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}
