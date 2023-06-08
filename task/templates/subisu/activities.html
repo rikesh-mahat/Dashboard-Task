@@ -1,22 +1,20 @@
-{%extends 'subisu/base.html' %}
+{% extends 'subisu/base.html' %}
 
-
-{%block start%}
-{%include 'subisu/alert.html' %}
-<div class="d-flex justify-content-end  px-6">
-  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'create_activities' %}">
+{% block start %}
+{% include 'subisu/alert.html' %}
+<div class="d-flex justify-content-end px-6">
+  <a class="btn btn-icon btn-3 btn-info ml-auto" href="{% url 'create_activities' %}">
     <span class="btn-inner--icon"><i class="material-icons">add</i></span>
     <span class="btn-inner--text">Add Activities</span>
   </a>
 </div>
 
 
-<div class="card">
+<div class="card" style="background-color: #3199C6">
   <div class="table-responsive">
     <table class="table align-items-center mb-0">
       <thead>
         <tr>
-
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">S.N</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Title</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ETA</th>
@@ -27,37 +25,29 @@
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Created</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Status</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Action</th>
-         
         </tr>
       </thead>
       <tbody>
-
         {% for activity in activities %}
             <tr>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ forloop.counter}}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.title }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.ETA}}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.location }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.contact }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.startTime }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.endTime }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.created }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.status }}</h6></td>
-      
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ forloop.counter}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.title }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.ETA }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.location }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.contact }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.startTime }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.endTime }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.created }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs" style="color: white;">{{ activity.status }}</h6></td>
               <td class="d-flex justify-content-around align-items-center">
-                
-                <a href="{%url 'edit_activity' activity.id%}" class="btn btn-primary btn-sm"><i class="material-icons text-md">edit</i></a>
-                <a href="{%url 'activities_mail' activity.id%}" class="btn btn-primary btn-sm"><i class="material-icons text-md">mail</i></a>
-                <a href="{%url 'delete_activity' activity.id%}" class="btn btn-primary btn-sm"><i class="material-icons text-md">delete</i></a>
+                <a href="{% url 'edit_activity' activity.id %}" class="btn btn-primary btn-sm"><i class="material-icons text-md">edit</i></a>
+                <a href="{% url 'activities_mail' activity.id %}" class="btn btn-primary btn-sm"><i class="material-icons text-md">mail</i></a>
+                <a href="{% url 'delete_activity' activity.id %}" class="btn btn-primary btn-sm"><i class="material-icons text-md">delete</i></a>
               </td>
-                
             </tr>
         {% endfor %}
-
-
-       
       </tbody>
     </table>
   </div>
 </div>
-{%endblock%}
+{% endblock %}

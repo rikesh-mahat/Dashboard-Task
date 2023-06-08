@@ -44,19 +44,8 @@ def ip_address(ip):
     else:
         raise ValidationError('Invalid IP Address')
     
-class Datacenter(models.Model):
-   
-    name = models.CharField(max_length= 200, verbose_name="Datacenter Name")
-    address = models.CharField(max_length=200, verbose_name="Datacenter Address")
-    contact = models.BigIntegerField(verbose_name="Datacenter Contact")
-    remarks = models.TextField(null=True, blank=True, help_text="Leave remarks for the datacenter")
-    
-    def __str__(self):
-        return self.name
 
-
-
-     
+  
 class Service(models.Model):
 
     hostId = models.ForeignKey(Hosts,on_delete=models.CASCADE, verbose_name="Select Host", null=True, related_name='services')
@@ -107,13 +96,12 @@ class Activities(models.Model):
     contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to")
     startTime = models.DateTimeField(null=True, blank=True, verbose_name="Activity Start Time")
     endTime = models.DateTimeField(null=True, blank=True,verbose_name="Activity End Time")
-    activities = models.TextField(max_length=500, verbose_name="Activities")
     created = models.DateTimeField(auto_now_add=True, verbose_name="Activity Created At")
     otherEmails = models.TextField(blank=True, null=True, help_text="Add other emails separated by spaces", validators=[validate_email_list])
     Comment= models.CharField(max_length=200, null=True)
     status= models.CharField(max_length=20,choices=ACTIVITY_STATUS, default= 'Open')
     sendEmail = models.BooleanField(verbose_name = "Send Email",default=False, help_text="Send Email Notification to Department")
-    ETA = models.CharField(max_length=200, null=True, blank=True, editable=False)
+    ETA = models.CharField(max_length=200, null=True, blank=True, editable = False)
 
     def save(self):
         if self.startTime and self.endTime:
@@ -134,10 +122,10 @@ class Activities(models.Model):
         return self.title
     
 
-class ActivityTable(models.Model):
+class ActivitiesComment(models.Model):
     actId  = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True, blank=True)
-    comment = models.TextField(max_length=500, null=True, blank=True, editable=False)
-    commentBy = models.CharField(max_length=200, null=True,blank=True,editable=False)
+    comment = models.TextField(max_length=500, null=True, blank=True, editable=True)
+    commentBy = models.CharField(max_length=200, null=True,blank=True,editable=True)
     timeStamp = models.TimeField(auto_now_add=True, null=True)
     
   

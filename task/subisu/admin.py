@@ -2,30 +2,11 @@ from django.contrib import admin
 from .models import *
 # Register your models here.
 from django.contrib import admin
-from Models.previliges import Priviliges
-from Models.applications import Applications
-from Models.hosts import Hosts
-from Models.client_services import ClientServices
-from Models.departments import Departments
-from Models.staffs import Staffs
-from Models.serviceTypes import ServiceTypes
-
-# from import_export.admin import ImportExportModelAdmin
-
-admin.site.register([Priviliges, Applications, Hosts, ClientServices, Departments, Staffs, ServiceTypes])
 
 # services ra host lai register gareko
 class ServiceInline(admin.StackedInline):
     model = Service
     extra = 0
-
-
-# datacenter table lai register gareko
-class HostDataCenter(admin.ModelAdmin):
-    list_display = ('name', 'address', 'contact')
-    
-    
-admin.site.register(Datacenter, HostDataCenter)
 
 # client table lai register gareko
 class HostClientContact(admin.ModelAdmin):
@@ -35,7 +16,7 @@ admin.site.register(ClientContact, HostClientContact)
 
 class ActivityInline(admin.StackedInline):
     readonly_fields = ('actId','comment', 'commentBy', 'timeStamp')
-    model = ActivityTable
+    model = ActivitiesComment
     extra = 0
 
 
@@ -46,6 +27,8 @@ class POAInline(admin.StackedInline):
 class HostActivities(admin.ModelAdmin):
     list_display = ('id', 'title', 'ETA','startTime', 'endTime', 'created')
     inlines = [ActivityInline, POAInline]
+    list_filter = ('title','created')
+    search_fields = ('id', 'title')
     
 admin.site.register(Activities, HostActivities)
 
@@ -61,6 +44,7 @@ admin.site.register(Activities, HostActivities)
 
 class HostEmailNotification(admin.ModelAdmin):
     list_display = ['activityId', 'emailBody', 'logTime']
+    list_filter = ('activityId', 'logTime')
     
 admin.site.register(EmailNotification, HostEmailNotification)
 
