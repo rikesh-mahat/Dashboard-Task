@@ -2,6 +2,14 @@ from django.contrib import admin
 from .models import *
 # Register your models here.
 from django.contrib import admin
+<<<<<<< HEAD
+=======
+
+
+# from import_export.admin import ImportExportModelAdmin
+
+
+>>>>>>> 6a293eabeff09b43f036af443e50eafde04b8e83
 
 # services ra host lai register gareko
 class ServiceInline(admin.StackedInline):

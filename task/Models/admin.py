@@ -9,7 +9,13 @@ from Models.client_services import ClientServices
 from Models.departments import Departments
 from Models.staffs import Staffs
 from Models.serviceTypes import ServiceTypes
+<<<<<<< HEAD
 from Models.branch import Branch
+=======
+
+
+admin.site.register([Priviliges, Applications, Hosts, ClientServices, Departments, Staffs, ServiceTypes])
+>>>>>>> 6a293eabeff09b43f036af443e50eafde04b8e83
 
 @admin.register(Units)
 class AdminUnit(admin.ModelAdmin):
@@ -27,6 +33,7 @@ class ApplicationAccessAdmin(admin.ModelAdmin):
     get_full_name.short_description = 'User'
     
     search_fields = ['userId__firstName', 'userId__middleName', 'userId__lastName']
+<<<<<<< HEAD
 
 class BranchAdmin(admin.ModelAdmin):
     list_display = ('id', 'branch_type', 'address', 'contact', 'longitude', 'latitude', 'ip_address', 'remarks')
@@ -99,3 +106,6 @@ admin.site.register(ServiceTypes, ServiceTypesAdmin)
 
 
     
+=======
+    
+>>>>>>> 6a293eabeff09b43f036af443e50eafde04b8e83

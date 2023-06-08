@@ -90,8 +90,13 @@
           <div class="form-group d-flex justify-content-between align-items-center border px-3">
             <label for="startDate" class="mr-2">Select Date:</label>
             <input type="date" id="startDate" name="start_date" class="form-control border px-3" style="width: 150px;">
+<<<<<<< HEAD
             <button class="btn btn-info mt-3" onclick="applyFilter()" type="submit">Apply</button>
             <a class="btn btn-info custom-btn mt-3" href="{% url 'dashboard' %}">Unapply Filter</a>
+=======
+            <button class="btn btn-dark mt-3" onclick="applyFilter()" type="submit">Apply</button>
+            <a class="btn btn-dark custom-btn mt-3" href="{% url 'dashboard' %}">Unapply Filter</a>
+>>>>>>> 6a293eabeff09b43f036af443e50eafde04b8e83
 
             <select id="filterOption" name="filter_option" class="custom-select-button">
               <option value="filter" {% if selected_option == 'filter' %} selected {% endif %}>Filter Option <i class="fa-solid fa-angle-down"></i></option>
