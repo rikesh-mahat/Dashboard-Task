@@ -153,8 +153,8 @@
           const xValues = JSON.parse('{{ xlabel|safe }}');
           const activitiesCounts = JSON.parse('{{ activities_counts_json|safe }}');
       
-          const statusLabels = ['Open', 'Pending', 'Close'];
-          const statusColors = ['green', 'yellow', 'red'];
+          const statusLabels = ['Open', 'Pending', 'Close', 'Work in Progress'];
+          const statusColors = ['green', 'yellow', 'red', 'skyblue'];
       
           const datasets = statusLabels.map((status, index) => {
               return {

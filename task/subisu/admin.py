@@ -38,20 +38,25 @@ class ActivityInline(admin.StackedInline):
     model = ActivityTable
     extra = 0
 
+
+class POAInline(admin.StackedInline):
+    model = Poa
+    extra = 0
+    
 class HostActivities(admin.ModelAdmin):
     list_display = ('id', 'title', 'ETA','startTime', 'endTime', 'created')
-    inlines = [ActivityInline]
+    inlines = [ActivityInline, POAInline]
     
 admin.site.register(Activities, HostActivities)
 
 
-class HostPOA(admin.ModelAdmin):
-    list_display = ('id', 'activityId', 'Engineers','poaDetails', 'poaEntry')
+# class HostPOA(admin.ModelAdmin):
+#     list_display = ('id', 'activityId', 'Engineers','poaDetails', 'poaEntry')
     
-    def Engineers(self, obj):
-        return ', '.join([x.firstName for x in obj.fieldEngineer.all()])
+#     def Engineers(self, obj):
+#         return ', '.join([x.firstName for x in obj.fieldEngineer.all()])
     
-admin.site.register(Poa,HostPOA)
+# admin.site.register(Poa,HostPOA)
 
 
 class HostEmailNotification(admin.ModelAdmin):

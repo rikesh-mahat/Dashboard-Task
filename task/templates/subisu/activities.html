@@ -17,17 +17,15 @@
       <thead>
         <tr>
 
-        
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">title</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">S.N</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Title</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">ETA</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">location</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">contact</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">start time</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">endtime</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">created</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">status</th>
-       
-            
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Location</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Contact</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Start Time</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">End Time</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Created</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Status</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Action</th>
          
         </tr>
@@ -36,6 +34,7 @@
 
         {% for activity in activities %}
             <tr>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ forloop.counter}}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.title }}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.ETA}}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.location }}</h6></td>
