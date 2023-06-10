@@ -1,52 +1,89 @@
-{%extends 'subisu/base.html' %}
-
-
-{%block start%}
+{%extends 'subisu/base.html' %} {%block start%}
 <section class="mt-3">
-<div class="d-flex justify-content-end  px-5 py-3">
-  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="">
-    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
-    <span class="btn-inner--text">Add Applications</span>
-  </a>
-</div>
-
-
-<div class="card">
-  <div class="table-responsive">
-    <table class="table align-items-center mb-0">
-      <thead>
-        <tr>
-        
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Name</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">URL</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Development Language</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Source Code</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Server Access</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Server Control</th>
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Host</th>
-
-        </tr>
-      </thead>
-      <tbody>
-
-        {% for application in applications %}
-            <tr>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{application.name}}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs"><a href="{{application.url}}">{{ application.url | truncatechars:100}}</a></h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.devLanguage }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.sourceCode}}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.serverAccess }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.serverControl }}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ application.hostId }}</h6></td>
-             
-            </tr>
-        {% endfor %}
-
-
-       
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-end px-5 py-3">
+    <a class="btn btn-icon btn-3 btn-dark ml-auto" href="">
+      <span class="btn-inner--icon"><i class="material-icons">add</i></span>
+      <span class="btn-inner--text">Add Applications</span>
+    </a>
   </div>
-</div>
+
+  <div class="px-4">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table align-items-center mb-0">
+          <thead>
+            <tr>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                Name
+              </th>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                URL
+              </th>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                Development Language
+              </th>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                Source Code
+              </th>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                Server Access
+              </th>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                Server Control
+              </th>
+              <th
+                class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7"
+              >
+                Host
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for application in applications %}
+            <tr>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">{{application.name}}</h6>
+              </td>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">
+                  <a href="{{application.url}}"
+                    >{{ application.url | truncatechars:100}}</a
+                  >
+                </h6>
+              </td>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">{{ application.devLanguage }}</h6>
+              </td>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">{{ application.sourceCode}}</h6>
+              </td>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">{{ application.serverAccess }}</h6>
+              </td>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">{{ application.serverControl }}</h6>
+              </td>
+              <td class="align-middle text-center">
+                <h6 class="mb-0 text-xs">{{ application.hostId }}</h6>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </section>
 {%endblock%}

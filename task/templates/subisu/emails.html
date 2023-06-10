@@ -3,15 +3,10 @@
 
 {%block start%}
 {%include 'subisu/alert.html' %}
-<div class="d-flex justify-content-end  px-6">
-  <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'create_activities' %}">
-    <span class="btn-inner--icon"><i class="material-icons">add</i></span>
-    <span class="btn-inner--text">Add Activities</span>
-  </a>
-</div>
 
 
-<div class="card">
+<div class = "px-4">
+<div class="card mt-4">
   <div class="table-responsive">
     <table class="table align-items-center mb-0">
       <thead>
@@ -51,5 +46,6 @@
       </tbody>
     </table>
   </div>
+</div>
 </div>
 {%endblock%}

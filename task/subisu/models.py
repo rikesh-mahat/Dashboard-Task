@@ -115,7 +115,7 @@ class Activities(models.Model):
     sendEmail = models.BooleanField(verbose_name = "Send Email",default=False, help_text="Send Email Notification to Department")
     ETA = models.CharField(max_length=200, null=True, blank=True, editable=False)
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.startTime and self.endTime:
             duration = self.endTime - self.startTime
 
@@ -126,7 +126,7 @@ class Activities(models.Model):
             else:
                 days = duration.days if duration.days > 1 else 1
                 self.ETA = f"{days} day"
-        super().save()
+        super().save(*args, **kwargs)
             
      
     
@@ -136,8 +136,8 @@ class Activities(models.Model):
 
 class ActivityTable(models.Model):
     actId  = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True, blank=True)
-    comment = models.TextField(max_length=500, null=True, blank=True, editable=False)
-    commentBy = models.CharField(max_length=200, null=True,blank=True,editable=False)
+    comment = models.TextField(max_length=500, null=True, blank=True)
+    commentBy = models.CharField(max_length=200, null=True,blank=True)
     timeStamp = models.TimeField(auto_now_add=True, null=True)
     
   

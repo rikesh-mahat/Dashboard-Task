@@ -1,0 +1,31 @@
+{% extends 'subisu/base.html' %}
+
+{% block start %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-11">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center">Department Form</h3>
+                <form method="POST">
+                    {% include 'subisu/alert.html' %}
+                    {% csrf_token %}
+                   
+                    {% for field in form %}
+                        <div class="input-group input-group-static mb-4 ">
+                            {{ field.label_tag }}
+                            {% if field.name == 'startTime' or field.name == 'endTime' %}
+                                <input type="text" class="form-control flatpickr datetimepicker" name="{{ field.name }}" data-close-on-select="true" />
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a class="btn btn-outline-secondary" href="{% url 'departments' %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}

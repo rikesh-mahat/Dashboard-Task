@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from Models.departments import Departments
 # tyo Models ko application_access ko file bata ApplicationAccess bhanney import gareko
 from Models.application_access import ApplicationAccess
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from Models.applications import Applications
 from Models.hosts import Hosts
 from django.contrib.auth import login, authenticate, logout
@@ -192,6 +192,7 @@ def add_host(request):
 
     return render(request, 'subisu/addhost.html')
 
+@login_required()
 def delete_host(request, id):
     host = Hosts.objects.get(id = id)
     host.delete()
@@ -199,30 +200,52 @@ def delete_host(request, id):
 
 
 
+from django.contrib.auth.models import User
+
+from django.contrib.auth.models import User
+
 def login_user(request):
     if request.method == "POST":
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
-        user = User.objects.filter(username = email)
-        if not user.exists():
-            messages.error(request,"User Doesn't exist")
+
+        session_username = request.session.get('email', None)
+        user = User.objects.filter(username=email).first()  # Retrieve the user
+        if not user:
+            messages.error(request, "User doesn't exist")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        
-          
-        
-        
-        user = authenticate(username = email, password = password)
-        
-        
+
+        if not user.is_staff:
+            messages.warning(request, "Sorry, your account has been deactivated")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        if session_username is not None and session_username == email:
+            attempts = request.session.get('attempts', 0)
+            if attempts >= 4:
+                user.is_staff = False
+                user.save()
+                messages.error(request, "Sorry, your account has been disabled for incorrect attempts")
+                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+            attempts += 1
+            request.session['attempts'] = attempts
+        else:
+            request.session['attempts'] = 1  # Reset the attempts if a different user is logging in
+            request.session['email'] = email
+
+        user = authenticate(username=email, password=password)
+
         if user:
             login(request, user)
+            request.session['attempts'] = 0  # Reset the attempts on successful login
             return redirect('dashboard')
         else:
-            messages.warning(request, "Sorry the Credentials do not match")
+            messages.warning(request, "Sorry, the credentials do not match")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-            
+
     return render(request, 'subisu/login.html')
+
+
 
 
 
@@ -268,7 +291,7 @@ def register_user(request):
 
     return render(request, 'subisu/signup.html')
 
-
+@login_required()
 def display_admin(request):
     keyword = request.GET.get('keyword')
     admins = User.objects.filter(is_superuser=True)
@@ -286,13 +309,13 @@ def display_admin(request):
     }
     
     return render(request, 'subisu/admin.html', context)
-
+@login_required()
 def edit_admin(request, id):
     user = User.objects.get(id = id)
     return render(request, 'subisu/editadmin.html', {'user' : user})
 
 
-
+@login_required()
 def activities(request):
     activities = Activities.objects.all().order_by('-created')
     context = {
@@ -317,15 +340,22 @@ def process_emails(primary_email, other_emails):
     
     return email_list
 
-
+@login_required()
 def create_acitivities(request):
     if request.method == "POST":
         context = {}
         form = ActivitiesForm(request.POST)
+        
         if form.is_valid():
             activity = form.save(commit=False)
             start_time = form.cleaned_data['startTime']
             end_time = form.cleaned_data['endTime']
+            
+            comment = form.cleaned_data['Comment']
+            staff = request.user.staff
+            staff_name = staff.firstName + " " + staff.middleName + " " +  staff.lastName if staff.middleName else  staff.firstName + " " +  staff.lastName
+            
+            ActivityTable.objects.create(actId = activity, comment = comment, commentBy = staff_name)
             
             if end_time < start_time:
                 messages.warning(request, "End time cannot be earlier than start time")
@@ -369,8 +399,7 @@ def create_acitivities(request):
 
     return render(request, 'subisu/addactivities.html', context)
 
-
-
+@login_required()
 def edit_activities(request, id):
     activity = Activities.objects.get(id = id)
     if request.method == "POST":
@@ -378,6 +407,12 @@ def edit_activities(request, id):
         if form.is_valid():
             activity = form.save(commit=False)
             activity.save()
+            
+            comment = form.cleaned_data['Comment']
+            staff = request.user.staff
+            staff_name = staff.firstName + " " + staff.middleName + " " +  staff.lastName if staff.middleName else  staff.firstName + " " +  staff.lastName
+            
+            ActivityTable.objects.create(actId = activity, comment = comment, commentBy = staff_name)
             if form.cleaned_data['sendEmail']:
                 title = form.cleaned_data['title']
                 location = form.cleaned_data['location']
@@ -388,7 +423,20 @@ def edit_activities(request, id):
                 # retrieve otherEmails value from cleaned_data
                 other_emails = form.cleaned_data['otherEmails']
                 
+                
+                # actId  = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True, blank=True)
+                # comment = models.TextField(max_length=500, null=True, blank=True)
+                # commentBy = models.CharField(max_length=200, null=True,blank=True)
+                # timeStamp = models.TimeField(auto_now_add=True, null=True)
+                
+                # firstName = models.CharField(max_length = 100)
+                # middleName = models.CharField(max_length=100, null = True, blank = True)
+                # lastName = models.CharField(max_length=100)
+                
+                
+                
                 email_list = process_emails(primary_email, other_emails)
+                
                 EmailNotification.objects.create(activityId = activity, emailBody = " \n".join([title, location, benefits, reason, impact]))
                 msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
                 if msg:
@@ -430,7 +478,7 @@ def send_activities_mail(request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-
+@login_required()
 def delete_activity(request, id):
     
     activity = Activities.objects.get(id=id)
@@ -439,7 +487,7 @@ def delete_activity(request, id):
     return redirect('activities')
 
 
-
+@login_required()
 def display_staffs(request):
     staffs = Staffs.objects.all()
     context = {
@@ -447,33 +495,42 @@ def display_staffs(request):
     }
     return render(request, 'subisu/staffs.html', context)
 
-
+@login_required()
 def delete_staff(request, id):
     staff = Staffs.objects.get(id = id)
     staff.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def create_staff(request):
     if request.method == 'POST':
-        print("form is working")
         form = StaffsForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('staffs')  
+            username = form.cleaned_data['email']
+            users = User.objects.filter(Q(email=username) | Q(username=username))
+            if users.exists():
+                messages.warning(request, "Sorry, the email is already in use")
+                return redirect('add_staff') 
+            new_staff_user = User.objects.create(username=username, email=username, is_superuser = True, is_staff = True)
+            instance = form.save(commit=False)
+            instance.user = new_staff_user
+            instance.save()
+            return redirect('staffs')
     else:
         form = StaffsForm()
     
     context = {
         'form': form
-        }
+    }
     
-
     return render(request, 'subisu/addstaff.html', context)
 
 
 
 
+@login_required()
 def view_emails(request):
     emails = EmailNotification.objects.all()
     context = {
@@ -481,7 +538,7 @@ def view_emails(request):
     }
     return render(request, 'subisu/emails.html', context)
 
-
+@login_required()
 def user_profile(request):
     if request.method == "POST":
         fname = request.POST.get('fname')
@@ -504,7 +561,7 @@ def user_profile(request):
 
 
 
-
+@login_required()
 def applications(request):
     
     applications = Applications.objects.all()
@@ -515,7 +572,7 @@ def applications(request):
     return render(request, 'subisu/applications.html', context)
 
 
-
+@login_required()
 def host_application_services(request, id):
     host = Hosts.objects.get(id  = id)
     applications = Applications.objects.filter(hostId = host)
@@ -527,7 +584,7 @@ def host_application_services(request, id):
     return render(request, 'subisu/applications.html', context)
 
 
-
+@login_required()
 def poa(request):
     
     # activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
@@ -545,7 +602,7 @@ def poa(request):
 
 
 
-
+@login_required()
 def create_poa(request):
     activities = Activities.objects.filter(Q(status=ACTIVITY_STATUS[0][0]) | Q(status=ACTIVITY_STATUS[1][0]))
     field_engineers = Staffs.objects.filter(status=True)
@@ -580,6 +637,44 @@ def create_poa(request):
     return render(request, 'subisu/create_poa.html', context)
 
 
+
+def error_404_view(request, exception):
+    return HttpResponseNotFound(render(request, 'subisu/404.html'))
+
+@login_required()
+def departments(request):
+    departments = Departments.objects.all()
     
+    context = {
+        'departments' : departments
+    } 
+    return render(request, 'subisu/departments.html', context)
+
+@login_required()
+def create_departments(request):
+    if request.method == 'POST':
+        form = DepartmentsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('departments')
+    context = {
+        'form' : DepartmentsForm
+    }
     
+    return render(request, 'subisu/add_departments.html', context)
+
+
+@login_required()
+def create_applications(request):
+    if request.method == 'POST':
+        form = ApplicationsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('applications')
+    context = {
+        'form' : ApplicationsForm
+    }
     
+    return render(request, 'subisu/add_applications.html', context)
+
+

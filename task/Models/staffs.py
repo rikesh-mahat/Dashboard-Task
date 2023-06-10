@@ -3,6 +3,7 @@ from Models.units import Units
 from django.contrib.auth.models import User
 
 class Staffs(models.Model):
+    user = models.OneToOneField(User,  on_delete=models.CASCADE, related_query_name='staff', null=True)
     firstName = models.CharField(max_length = 100)
     middleName = models.CharField(max_length=100, null = True, blank = True)
     lastName = models.CharField(max_length=100)

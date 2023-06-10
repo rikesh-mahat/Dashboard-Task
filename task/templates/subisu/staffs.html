@@ -2,8 +2,8 @@
 
 
 {%block start%}
-
-<div class="d-flex justify-content-end border">
+<section class="mt-3">
+<div class="d-flex justify-content-end px-5">
   
   <a class="btn btn-icon btn-3 btn-dark ml-auto" href="{%url 'create_staff' %}">
     <span class="btn-inner--icon"><i class="material-icons">add</i></span>
@@ -11,7 +11,7 @@
   </a>
 </div>
 
-
+<div class = "px-4">
 <div class="card">
   <div class="table-responsive">
     <table class="table align-items-center mb-0">
@@ -35,7 +35,7 @@
 
         {% for staff in staffs %}
             <tr>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{staff.fempId}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{staff.empId}}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ staff.firstName }}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{%if  staff.middleName%}{{ staff.middleName }}{%else%}-{%endif%}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ staff.lastName }}</h6></td>
@@ -53,4 +53,6 @@
     </table>
   </div>
 </div>
+</div>
+</section>
 {%endblock%}

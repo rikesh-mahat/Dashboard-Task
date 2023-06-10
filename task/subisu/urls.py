@@ -23,6 +23,9 @@ urlpatterns = [
     path('profile/', user_profile, name='profile'),
     path('applications/', applications, name='applications'),
     path('application/<int:id>/', host_application_services , name="application"),
+    path('create-applications/', create_applications, name='create_applications'),
     path('poa/', poa, name='poa'),
-    path('create-poa/', create_poa, name='create_poa')
+    path('create-poa/', create_poa, name='create_poa'),
+    path('departments/', departments, name='departments'),
+    path('create-departments/', create_departments, name='create_departments')
 ]

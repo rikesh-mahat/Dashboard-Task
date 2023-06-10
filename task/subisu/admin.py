@@ -28,7 +28,7 @@ class HostClientContact(admin.ModelAdmin):
 admin.site.register(ClientContact, HostClientContact)
 
 class ActivityInline(admin.StackedInline):
-    readonly_fields = ('actId','comment', 'commentBy', 'timeStamp')
+    
     model = ActivityTable
     extra = 0
 
