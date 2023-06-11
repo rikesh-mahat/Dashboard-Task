@@ -9,6 +9,8 @@ def send_department_mail(title, maintenance, location, reason, benefits, impact 
     subject  = title
     receiver = contact
     
+    
+    
     context = {'title' : title, 'maintenance' : maintenance, 'location' : location, 'reason' : reason, 'benefits' : benefits, 'impact' : impact}
     html_content = render_to_string('subisu/departmentmail.html', context)
     text_content = strip_tags(html_content)

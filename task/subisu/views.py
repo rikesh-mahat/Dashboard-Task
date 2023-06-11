@@ -358,7 +358,7 @@ def create_acitivities(request):
                 return render(request, 'subisu/addactivities.html', context)
             
 
-            
+            time = f"{start_time} - {end_time}"
             if end_time < start_time:
                 messages.warning(request, "End time cannot be earlier than start time")
                 context['form'] = form
@@ -387,7 +387,8 @@ def create_acitivities(request):
                 other_emails = form.cleaned_data['otherEmails']
                 email_list = process_emails(primary_email, other_emails)
                 EmailNotification.objects.create(activityId=activity, emailBody="\n".join([title, location, benefits, reason, impact]))
-                msg = send_department_mail(title, "time", location, reason, benefits, impact, email_list)
+                
+                msg = send_department_mail(title, time, location, reason, benefits, impact, email_list)
                 if msg:
                     messages.info(request, "Mail sent successfully")
                 else:
@@ -443,7 +444,7 @@ def edit_activities(request, id):
             
 
             
-            
+            time = f"{activity.startTime} - {activity.endTime}"
             
             
 
@@ -480,7 +481,7 @@ def edit_activities(request, id):
                 email_list = process_emails(primary_email, other_emails)
                 
                 EmailNotification.objects.create(activityId = activity, emailBody = " \n".join([title, location, benefits, reason, impact]))
-                msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
+                msg = send_department_mail(title,time, location, reason, benefits, impact, email_list)
                 if msg:
                     messages.info(request, "Mail sent successfully")
                 else:
@@ -512,11 +513,13 @@ def send_activities_mail(request, id):
     impact = actvitiy.impact
     contact = actvitiy.contact
     other_emails = actvitiy.otherEmails
-    
+    time = f"{actvitiy.startTime} - {actvitiy.endTime}"
     email_list = process_emails(contact, other_emails)            
-    msg = send_department_mail(title,"time",location, reason, benefits, impact, email_list)
+    msg = send_department_mail(title,time,location, reason, benefits, impact, email_list)
     
-    
+    if msg:
+        messages.info(request, "Mail sent successfully")
+        return redirect('activities')
     EmailNotification.objects.create(activityId = actvitiy, emailBody = " \n".join([title, location, benefits, reason, impact]))
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
