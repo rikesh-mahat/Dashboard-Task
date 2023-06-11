@@ -416,18 +416,42 @@ def create_acitivities(request):
 def edit_activities(request, id):
     activity = Activities.objects.get(id = id)
     comments = ActivityTable.objects.filter(actId = activity)
+    
+    
+    start_time = activity.startTime
+    end_time = activity.endTime
+    
+    
     if request.method == "POST":
         form = ActivitiesForm(request.POST, instance=activity)
+        
         if form.is_valid():
             activity = form.save(commit=False)
+            activity.startTime = start_time
+            activity.endTime = end_time
+            new_start_time  = form.cleaned_data['startTime']
+            new_end_time = form.cleaned_data['endTime']
+            
+            if start_time != new_start_time and new_start_time is not None:
+                activity.startTime = new_start_time
+            
+            if end_time != new_end_time and new_end_time is not None:
+                activity.endTime = new_end_time
+            
             activity.save()
+            
+
+            
+            
+            
+            
 
             comment = activity.Comment.strip()
             last_comment_instance = ActivityTable.objects.filter(actId=activity).last()
             previous_comment = last_comment_instance.comment.strip()
             pattern = re.escape(previous_comment)
 
-            print(comment, previous_comment)
+          
             if comment is not None and  not re.search(pattern, comment):
                 print("it is working lol")
                 try:

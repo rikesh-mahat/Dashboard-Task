@@ -35,7 +35,7 @@
         {% for activity in activities %}
             <tr>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ forloop.counter}}</h6></td>
-              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.title }}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{activity.id}} - {{ activity.title }}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.ETA}}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.location }}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ activity.contact }}</h6></td>
