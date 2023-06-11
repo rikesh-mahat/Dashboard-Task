@@ -1,47 +1,81 @@
-{% extends 'subisu/base.html' %}
-
-{% block start %}
+{% extends 'subisu/base.html' %} {% block start %}
 <div class="row justify-content-center py-5">
-    <div class="col-md-11">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title text-center">Activities Form</h3>
-                <form method="POST">
-                    {% include 'subisu/alert.html' %}
-                    {% csrf_token %}
-                    {{ form.media }}  {# Include form's media files #}
-                    {% for field in form %}
-                        <div class="input-group input-group-static mb-4 ">
-                            {{ field.label_tag }}
-                            {% if field.name == 'startTime' or field.name == 'endTime' %}
-                                <input type="text" class="form-control flatpickr datetimepicker" name="{{ field.name }}" data-close-on-select="true" />
-                            {% else %}
-                                {{ field }}
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                    <button type="submit" class="btn btn-success">Save</button>
-                    <a class="btn btn-outline-secondary" href="{% url 'activities' %}">Cancel</a>
-                </form>
-            </div>
-        </div>
+  <div class="col-md-11">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title text-center">Activities Form</h3>
+        <form method="POST">
+          {% include 'subisu/alert.html' %} {% csrf_token %} {{ form.media }} {#
+          Include form's media files #} {% for field in form %}
+          <div class="input-group input-group-static mb-4">
+            {{ field.label_tag }} {% if field.name == 'startTime' or field.name == 'endTime' %}
+            <input
+              type="text"
+              class="form-control flatpickr datetimepicker"
+              name="{{ field.name }}"
+              data-close-on-select="true"
+            />
+            {% else %} {{ field }} {% endif %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success">Save</button>
+          <a class="btn btn-outline-secondary" href="{% url 'activities' %}"
+            >Cancel</a
+          >
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
-<script>
-  $(function () {
-    $(".flatpickr").flatpickr({
-      enableTime: true,
-      dateFormat: 'Y-m-d H:i',
-      allowInput: false, // Disable manual input
-      defaultDate: "{{ selected_date }}", // Replace with the selected date value
-      // Add any other options you need
-      onChange: function(selectedDates, dateStr, instance) {
-        if (selectedDates.length > 0) {
-          instance.close();
-        }
-      }
-    });
-  });
-</script>
-{% endblock %}
+{%if comments%}
+<section style="margin-top: 4rem">
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-11">
+      <!-- Comments Section -->
+      <div class="card my-4">
+        <h5 class="card-header">Comments:</h5>
+        <div class="card-body">
+        {%for comment in comments%}
+          <div class="card mb-4">
+            <div class="card-body">
+              <h6 class="fw-bold text-primary mb-1 border-bottom" style="text-transform:capitalize">
+                {{comment.commentBy}}  <span class="text-muted small mb-0">
+                  - {{comment.timeStamp}} 
+                </span>
+              </h6>
+              
+              <p class="mt-3 mb-4 pb-2">Commented : {{comment.comment}}</p>
+            </div>
+            
+          </div>
+
+          
+
+        {%endfor%}  
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{%endif%}
+      <script>
+        $(function () {
+          $(".flatpickr").flatpickr({
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            allowInput: false, // Disable manual input
+            defaultDate: "{{ selected_date }}", // Replace with the selected date value
+            // Add any other options you need
+            onChange: function (selectedDates, dateStr, instance) {
+              if (selectedDates.length > 0) {
+                instance.close();
+              }
+            },
+          });
+        });
+      </script>
+      {% endblock %}
+    </div>
+  </div>
+</section>

@@ -350,12 +350,13 @@ def create_acitivities(request):
             activity = form.save(commit=False)
             start_time = form.cleaned_data['startTime']
             end_time = form.cleaned_data['endTime']
+
+            if start_time is None or end_time is None:
+                messages.info(request,"Please choose a start time and end time")
+                context['form'] = form
+                return render(request, 'subisu/addactivities.html', context)
             
-            comment = form.cleaned_data['Comment']
-            staff = request.user.staff
-            staff_name = staff.firstName + " " + staff.middleName + " " +  staff.lastName if staff.middleName else  staff.firstName + " " +  staff.lastName
-            
-            ActivityTable.objects.create(actId = activity, comment = comment, commentBy = staff_name)
+
             
             if end_time < start_time:
                 messages.warning(request, "End time cannot be earlier than start time")
@@ -363,6 +364,18 @@ def create_acitivities(request):
                 return render(request, 'subisu/addactivities.html', context)
             
             activity.save()
+            
+            comment = form.cleaned_data['Comment']
+
+            staff_name = request.user.username  # Default to username if staff attribute is not available
+
+            if request.user.is_authenticated and hasattr(request.user, 'staff'):
+                staff = request.user.staff
+                staff_name = staff.firstName + " " + staff.middleName + " " +  staff.lastName if staff.middleName else  staff.firstName + " " +  staff.lastName
+            staff_name = request.user.username
+            ActivityTable.objects.create(actId=activity, comment=comment, commentBy=staff_name)
+            
+            
             if 'send_email' in form.cleaned_data and form.cleaned_data['send_email']:
                 title = form.cleaned_data['title']
                 location = form.cleaned_data['location']
@@ -402,17 +415,29 @@ def create_acitivities(request):
 @login_required()
 def edit_activities(request, id):
     activity = Activities.objects.get(id = id)
+    comments = ActivityTable.objects.filter(actId = activity)
     if request.method == "POST":
         form = ActivitiesForm(request.POST, instance=activity)
         if form.is_valid():
             activity = form.save(commit=False)
             activity.save()
+
+            comment = activity.Comment.strip()
+            last_comment_instance = ActivityTable.objects.filter(actId=activity).last()
+            previous_comment = last_comment_instance.comment.strip()
+            pattern = re.escape(previous_comment)
+
+            print(comment, previous_comment)
+            if comment is not None and  not re.search(pattern, comment):
+                print("it is working lol")
+                try:
+                    staff = request.user.staff
+                    staff_name = staff.firstName + " " + staff.middleName + " " + staff.lastName if staff.middleName else staff.firstName + " " + staff.lastName
+                except AttributeError:
+                    staff_name = request.user.username
+
+                ActivityTable.objects.create(actId=activity, comment=comment, commentBy=staff_name)
             
-            comment = form.cleaned_data['Comment']
-            staff = request.user.staff
-            staff_name = staff.firstName + " " + staff.middleName + " " +  staff.lastName if staff.middleName else  staff.firstName + " " +  staff.lastName
-            
-            ActivityTable.objects.create(actId = activity, comment = comment, commentBy = staff_name)
             if form.cleaned_data['sendEmail']:
                 title = form.cleaned_data['title']
                 location = form.cleaned_data['location']
@@ -423,15 +448,7 @@ def edit_activities(request, id):
                 # retrieve otherEmails value from cleaned_data
                 other_emails = form.cleaned_data['otherEmails']
                 
-                
-                # actId  = models.ForeignKey(Activities, on_delete=models.SET_NULL, null=True, blank=True)
-                # comment = models.TextField(max_length=500, null=True, blank=True)
-                # commentBy = models.CharField(max_length=200, null=True,blank=True)
-                # timeStamp = models.TimeField(auto_now_add=True, null=True)
-                
-                # firstName = models.CharField(max_length = 100)
-                # middleName = models.CharField(max_length=100, null = True, blank = True)
-                # lastName = models.CharField(max_length=100)
+        
                 
                 
                 
@@ -453,7 +470,8 @@ def edit_activities(request, id):
         form = ActivitiesForm(instance=activity)
     context = {
         'form': form,
-        'activity_id': id
+        'activity_id': id,
+        'comments' : comments
     }
     return render(request, 'subisu/addactivities.html', context)
 
