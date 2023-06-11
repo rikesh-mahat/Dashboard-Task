@@ -131,6 +131,7 @@ def dashboard(request):
         'active_services': active_services,
         'inactive_services' : inactive_services,
         'hosts' : host_counts,
+        'services' : client_services_count,
         'application_counts' : application_counts,
         'Department': department_counts,
         'applications' : applications,

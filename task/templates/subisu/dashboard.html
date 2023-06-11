@@ -81,6 +81,24 @@
           </div>
         </div>
 
+
+        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+          <div class="card">
+            <div class="card-header p-3 pt-2">
+              <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                <i class="material-icons opacity-10">service</i>
+              </div>
+              <div class="text-end pt-1">
+                <a href=""> 
+                <p class="text-sm mb-0 text-capitalize">No. of Client Services</p> 
+                <h4 class="mb-0">{{ services}}</h4>
+                </a>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+
       
             
           </div>
@@ -159,13 +177,13 @@
                   data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
                   backgroundColor: statusColors[index], // Set the background color for each bar
                   borderColor: 'white', // Optional: Set the border color for each bar
-                  borderWidth: 1, // Optional: Set the border width for each bar
-                  barPercentage: 0.7 // Optional: Adjust the width of each bar (0.0 - 1.0)
+                  borderWidth: 0.2, // Optional: Set the border width for each bar
+                  barPercentage: 1 // Optional: Adjust the width of each bar (0.0 - 1.0)
               };
           });
       
           const dataMaxValue = Math.max(...datasets.flatMap(dataset => dataset.data));
-          const suggestedMax = dataMaxValue + 2;
+          const suggestedMax = dataMaxValue + 1;
       
           new Chart("myChart", {
               type: "bar",
