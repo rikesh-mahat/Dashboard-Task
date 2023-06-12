@@ -11,7 +11,7 @@
                 
                 <div class="input-group input-group-static mb-4">
                     <label for="id_activity_id">Select Activity</label>
-                    <select id="id_activity_id" name="activity_id" class="form-control">
+                    <select id="id_activity_id" name="activity_id" class="form-control input-group input-group-outline my-3">
                       {% for activity in activities %}
                         <option value="{{ activity.id }}">{{ activity.title }}</option>
                       {% endfor %}
@@ -32,7 +32,7 @@
                 <!-- poa_details field -->
                 <div class="input-group input-group-static mb-4">
                   <label for="id_poa_details">POA Details</label>
-                  <textarea id="id_poa_details" name="poa_details" class="form-control" rows="3"></textarea>
+                  <textarea id="id_poa_details" name="poa_details" class="input-group input-group-outline my-3 border" rows="3"></textarea>
                 </div>
                 
               

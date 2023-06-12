@@ -21,3 +21,6 @@ class ApplicationAccess(models.Model):
     previligeId = models.ForeignKey(Priviliges, on_delete=models.PROTECT)
     applicationAccountStatus = models.CharField(max_length = 200, choices=APPLICATION_ACCOUNT_OPTIONS)
     applicationAccessMethod = models.CharField(max_length=100, choices=APPLICATION_ACCESS_OPTIONS)
+    
+    
+    

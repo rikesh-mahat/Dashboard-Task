@@ -21,18 +21,18 @@ class ActivitiesForm(forms.ModelForm):
         model = Activities
         fields = '__all__'
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'location': forms.TextInput(attrs={'class': 'form-control'}),
-            'reason': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'benefits': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'impact': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-            'contact': forms.Select(attrs={'class': 'form-control'}),
-            'startTime': DateTimePickerInput(attrs={'class': 'form-control'}),
-            'endTime': DateTimePickerInput(attrs={'class': 'form-control'}),
-            'activities': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'otherEmails': forms.TextInput(attrs={'class': 'form-control'}),
-            'Comment': forms.TextInput(attrs={'class': 'form-control'}),
-            'status': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'location': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'reason': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
+            'benefits': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
+            'impact': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
+            'contact': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'startTime': DateTimePickerInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'endTime': DateTimePickerInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'activities': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 5}),
+            'otherEmails': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'Comment': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'status': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
         }
 
 
@@ -45,13 +45,13 @@ class StaffsForm(forms.ModelForm):
         exclude = ['user']
         
         widgets = {
-            'user' : forms.Select(attrs={'class' : 'form-control'}),
-            'firstName': forms.TextInput(attrs={'class': 'form-control'}),
-            'middleName': forms.TextInput(attrs={'class': 'form-control'}),
-            'lastName': forms.TextInput(attrs={'class': 'form-control'}),
-            'empId': forms.TextInput(attrs={'class': 'form-control'}),
-            'unitId': forms.Select(attrs={'class': 'form-control'}),
-            'email': forms.TextInput(attrs={'class': 'form-control'}),   
+            'user' : forms.Select(attrs={'class' : 'input-group input-group-outline my-3 border rounded'}),
+            'firstName': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'middleName': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'lastName': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'empId': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'unitId': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'email': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),   
         }   
         
 
@@ -61,9 +61,9 @@ class PoaForm(forms.ModelForm):
         model = Poa
         fields = '__all__'
         widgets = {
-            'activityId': forms.Select(attrs={'class': 'form-control'}),
+            'activityId': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
             'fieldEngineer': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
-            'poaDetails': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'poaDetails': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
             'units': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
             'sendEmail': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
@@ -77,10 +77,10 @@ class DepartmentsForm(forms.ModelForm):
         model = Departments
         fields = ['name', 'Email', 'status', 'vpName']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'Email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'Email': forms.EmailInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
             'status': forms.CheckboxInput(attrs={'class': 'custom-checkbox'}),
-            'vpName': forms.TextInput(attrs={'class': 'form-control'}),
+            'vpName': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
         }
 
 
@@ -91,11 +91,11 @@ class ApplicationsForm(forms.ModelForm):
         model = Applications
         fields = ['name', 'url', 'devLanguage', 'sourceCode', 'serverAccess', 'serverControl', 'hostId']
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'url': forms.URLInput(attrs={'class': 'form-control'}),
-            'devLanguage': forms.TextInput(attrs={'class': 'form-control'}),
-            'sourceCode': forms.Select(attrs={'class': 'form-control'}),
-            'serverAccess': forms.TextInput(attrs={'class': 'form-control'}),
-            'serverControl': forms.Select(attrs={'class': 'form-control'}),
-            'hostId': forms.Select(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'url': forms.URLInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'devLanguage': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'sourceCode': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'serverAccess': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'serverControl': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
+            'hostId': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
         }

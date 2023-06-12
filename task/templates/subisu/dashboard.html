@@ -1,12 +1,14 @@
 <style>
-  input, button, .custom-btn{
+  input, button, .custom-select-button{
     height : 38px;
     border-radius:10px;
+    
   }
   label{
     padding-top:0.5em;
   }
 
+ 
   .custom-select-button {
     appearance: none;
     -webkit-appearance: none;
@@ -106,48 +108,31 @@
       </div>
 
       
-      <div class="col-md-7">
-        <form method="GET" id="filterForm" class="px-3 ">
-          
-
-          <div class="form-group d-flex justify-content-between align-items-center border rounded px-3" style="border-color: rgba(0, 0, 0, 0.8);">
-            <label for="startDate" class="mr-2">Select Date:</label>
-            <input type="date" id="startDate" name="start_date" class="form-control border px-3" style="width: 150px;">
-            <button class="btn btn-dark mt-3" onclick="applyFilter()" type="submit">Apply</button>
-            <a class="btn btn-dark custom-btn mt-3" href="{% url 'dashboard' %}">Unapply Filter</a>
-
-            <select id="filterOption" name="filter_option" class="custom-select-button">
+      <div class="col-md-8">
+        <form method="GET" id="filterForm" class="px-1">
+          <div class="form-group d-flex flex-wrap  justify-content-evenly  border rounded px-3" style="border-color: rgba(0, 0, 0, 0.8);">
+            <label for="startDate" class="mr-1">Start Date:</label>
+            <input type="date" id="startDate" name="start_date" class="form-control border px-3" style="width: 100%; max-width: 150px;">
+      
+            <label for="endDate" class="mr-1">End Date:</label>
+            <input type="date" id="endDate" name="end_date" class="form-control border px-3" style="width: 100%; max-width: 150px;">
+      
+            <button class="btn btn-dark btn-block" onclick="applyFilter()" type="submit">Apply</button>
+            <a class="btn btn-dark btn-block" href="{% url 'dashboard' %}">Unapply Filter</a>
+      
+            <select id="filterOption" name="filter_option" class="custom-select-button" style="max-width: 150px;">
               <option value="filter" {% if selected_option == 'filter' %} selected {% endif %}>Filter Option <i class="fa-solid fa-angle-down"></i></option>
               <option value="today" {% if selected_option == 'today' %} selected {% endif %}>Today</option>
               <option value="this_week" {% if selected_option == 'this_week' %} selected {% endif %}>This week</option>
               <option value="last_week" {% if selected_option == 'last_week' %} selected {% endif %}>Last week</option>
               <option value="this_month" {% if selected_option == 'this_month' %} selected {% endif %}>This month</option>
             </select>
-        </div>
-        
-        
-          <!-- Uncomment this section if you want to include an end date input field -->
-          <!-- <div class="form-group">
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="end_date" class="form-control">
-          </div> -->
-      
-  
-
-        
-              
-       
-           
-       
+            
+          </div>
         </form>
       </div>
       
-     
-        
 
-      
-      
-      
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       
       
@@ -177,7 +162,7 @@
                   data: xValues.map((date) => (activitiesCounts[date] && activitiesCounts[date][status]) || 0),
                   backgroundColor: statusColors[index], // Set the background color for each bar
                   borderColor: 'white', // Optional: Set the border color for each bar
-                  borderWidth: 0.2, // Optional: Set the border width for each bar
+                  borderWidth: 2, // Optional: Set the border width for each bar
                   barPercentage: 1 // Optional: Adjust the width of each bar (0.0 - 1.0)
               };
           });
@@ -221,8 +206,7 @@
         <script>
           const active = '{{active_services}}';
           const inactive = '{{inactive_services}}';
-          
-          
+        
           new Chart("myChart-0", {
             type: "doughnut",
             data: {
@@ -237,17 +221,32 @@
             options: {
               plugins: {
                 title: {
+                 
                   display: true,
                   text: 'Client Services Status',
                   font: {
                     size: 16,
                     weight: 'bold'
                   }
+                },
+                tooltip: {
+                  callbacks: {
+                    label: (context) => {
+                      const value = context.parsed;
+                     
+                      const total = parseInt(active) + parseInt(inactive);
+                      console.log(value)
+                      console.log(total)
+                      const percentage = ((value / total) * 100).toFixed(2);
+                      return `${percentage}%`;
+                    }
+                  }
                 }
               }
             }
           });
         </script>
+        
     
       </div>
     </div>
@@ -353,7 +352,7 @@
                     <tr>
 
                       <td>
-                        <div class="d-flex px-2 py-1">
+                        <div class="d-flex px-3 py-1">
                           <div class="d-flex flex-column justify-content-center">
                             <h6 class="mb-0 text-xs font-weight-bolder">{{host.hostname}}</h6>
                           </div>

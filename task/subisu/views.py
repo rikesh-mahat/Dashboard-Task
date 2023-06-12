@@ -53,40 +53,42 @@ def dashboard(request):
     end_date_filter = request.GET.get('end_date')
 
     
+    
     # Convert the start and end dates to datetime objects
     start_date = datetime.strptime(start_date_filter, '%Y-%m-%d').date() if start_date_filter else None
-    
     end_date = datetime.strptime(end_date_filter, '%Y-%m-%d').date() if end_date_filter else None
 
-    current_date = datetime.now().date()
     
+    current_date = datetime.now().date()
+
     filter_option = request.GET.get('filter_option')
     
     
-   
-    
-    if start_date is None and filter_option != "filter":
-        print("this condition is true")
+    if start_date is None and filter_option is not None:
         if filter_option == "today":
             start_date = current_date - timedelta(days=0)
         elif filter_option == "this_week":
-            start_date = current_date - timedelta(days=7)
+            start_date = current_date - timedelta(days=6)
         elif filter_option == "last_week":
-            start_date = current_date - timedelta(days=14)
+            start_date = current_date - timedelta(days=13)
             end_date = current_date - timedelta(days=7)
         else:
-            start_date = datetime(datetime.now().year, datetime.now().month, 1).date()
-        
+            start_date = datetime(current_date.year, current_date.month, 1).date()
+
     # Calculate the start and end dates for the previous five days
+    start_date_default = current_date - timedelta(days=6)
+    end_date_default = current_date
+
     
-    start_date_default = current_date - timedelta(days=9)
-    end_date_default = current_date - timedelta(days=0)
+    start_date = start_date if start_date is not None else start_date_default
+    end_date = end_date if end_date is not None else end_date_default
     
     
-    
-    start_date = start_date or start_date_default
-    end_date = end_date or end_date_default
-    
+
+    if (end_date - start_date).days < 0:
+        print("some thing is fishy here")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
     # Query the activities for the specified date range and group them by date and status
     activities_count = Activities.objects.filter(created__date__range=[start_date, end_date]) \
         .values('created__date', 'status') \
@@ -117,7 +119,7 @@ def dashboard(request):
     inactive_services = client_services.filter(serviceStatus=False).count()
     
     client_services_count = client_services.count()
-    
+    print(inactive_services, active_services)
     # more_info_dict = {
     #     'Hosts' : host_counts,
     #     'Applications' : application_counts,
