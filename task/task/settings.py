@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'subisu',
     'Models',
     'fontawesomefree',
-    'django_flatpickr'
+    'django_flatpickr',
+    'import_export'
 ]
 
 MIDDLEWARE = [
@@ -146,3 +147,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/login/'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+
+JAZZMIN_SETTINGS = {
+    "show_ui_builder" : True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+   
+    "footer_small_text": True,
+
+    "footer_fixed": False,
+  
+}

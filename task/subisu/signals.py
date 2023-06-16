@@ -1,64 +1,19 @@
-# from django.db.models.signals import post_save, m2m_changed
-# from django.dispatch import receiver
-# from .models import Activities, Poa
-# from .emails import send_department_mail, send_poa_emails
-# from django.contrib.auth.models import User
+import re
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from subisu.models import Activities, EmailNotification
+from subisu.emails import send_department_mail
+from django.contrib import messages
 
 
 
-
-# @receiver(post_save, sender=Activities)
-# def activity_time_and_mail(sender, instance, created, **kwargs):
-#     if created and instance.sendEmail:
-#         print(instance.endTime, instance.startTime, instance.created)
-#         timespan = instance.endTime - instance.startTime
-#         days = f"{timespan.days} days"  if timespan.days > 1 else f"{timespan.days} day"
-#         hours = f"{timespan.seconds // 3600} hours" if (timespan.seconds // 3600) > 1 else f"{timespan.seconds // 3600} hour"
-#         min  = (timespan.seconds // 60) % 60
-#         minutes = f"{min} minutes" if min > 1 else f"{min} minute"
+@receiver(post_save, sender=Activities)
+def create_email(sender, instance, created, **kwargs):
+    if created and instance.sendEmail:
         
-#         seconds = f"{timespan.seconds - min  * 60} seconds"
+        EmailNotification.objects.create(activityId = instance, emailBody = "\n".join([instance.title, instance.location, instance.reason, instance.impact]))
+        
+       
         
         
-
-#         if int(days.split(" ")[0]) > 0:
-#             instance.maintenanceWindow = " ".join([days, hours, minutes, seconds])
-#         elif int(hours.split(" ")[0]) > 0:
-#             instance.maintenanceWindow = " ".join([hours, minutes, seconds])
-#         elif int(minutes.split(" ")[0]) > 0:
-#             instance.maintenanceWindow = " ".join([minutes, seconds])
-#         else:
-#             instance.maintenanceWindow = seconds
-        
-#         if instance.maintenanceWindow == "0 seconds":
-#                 instance.maintenanceWindow = f"StartTime {instance.startTime}"
-#         instance.save()
-        
-#         title = instance.title 
-#         maintenance = instance.maintenanceWindow
-#         location = instance.location
-#         reason = instance.reason
-#         benefits = instance.benefits
-#         impact = instance.impact
-#         unit_email = instance.contact.email
-#         department_email = instance.contact.departmentId.email
-#         other_email = instance.otherEmails.split()
-#         contact_list = [unit_email, department_email]
-#         if len(other_email) > 1:
-#             contact_list.extend(other_email)
-#         send_department_mail(title, maintenance, location, reason, benefits, impact, contact_list)
-
-# @receiver(m2m_changed, sender=Poa.units.through)
-# def poa_units_changed(sender, instance, action, **kwargs):
-#     if action in ('post_add', 'post_remove', 'post_clear'):
-     
-#         poa = instance
-#         units = poa.units.all()
-#         unit_email_list = [unit.email for unit in units] if units.exists() else []
-        
-#         if unit_email_list:
-#             subject = poa.activityId.title
-#             message = poa.poaDetails
-#             send_poa_emails(subject, message, unit_email_list)
-
-
+       

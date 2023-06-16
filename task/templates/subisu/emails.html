@@ -12,9 +12,9 @@
       <thead>
         <tr>
 
-        
-            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Related Activity</th>
           
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Related Activity</th>
+            <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Sent To</th>
             <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Log Time</th>
           
        
@@ -27,16 +27,12 @@
      
         {% for email in emails %}
             <tr>
+              
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{email.activityId.title}}</h6></td>
+              <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ email.activityId.contact.email}} {{email.activityId.otherEmails}}</h6></td>
               <td class="align-middle text-center"><h6 class="mb-0 text-xs">{{ email.logTime}}</h6></td>
             
       
-              {% comment %} <td class="d-flex justify-content-around align-items-center">
-                
-                <a href="{%url 'edit_activity' activity.id%}" class="btn btn-primary btn-sm"><i class="material-icons text-md">edit</i></a>
-                <a href="{%url 'activities_mail' activity.id%}" class="btn btn-primary btn-sm"><i class="material-icons text-md">mail</i></a>
-                <a href="{%url 'delete_activity' activity.id%}" class="btn btn-primary btn-sm"><i class="material-icons text-md">delete</i></a>
-              </td> {% endcomment %}
                 
             </tr>
         {% endfor %}

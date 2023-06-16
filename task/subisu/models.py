@@ -102,7 +102,6 @@ class Activities(models.Model):
     
     location = models.CharField(max_length=200, null=True, blank=True)
     reason = models.TextField(verbose_name="Reasons", blank=True)
-    benefits = models.TextField(verbose_name="Benefits for Layer", blank=True)
     impact = models.TextField(verbose_name="Impact", blank=True)
     contact = models.ForeignKey(Units, on_delete=models.CASCADE,  null=True, help_text="Select units you want to send mail to")
     startTime = models.DateTimeField(null=True, blank=True, verbose_name="Activity Start Time")

@@ -32,6 +32,23 @@ from .forms import *
 from django.db.models import Q
 
 
+def process_emails(primary_email, other_emails):
+    # split string by comma or space
+    emails = re.split(r',|\s', other_emails)
+    
+    # filter out any empty strings
+    emails = filter(lambda x: x != '', emails)
+    
+    # validate each email using regex
+    email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    valid_emails = filter(lambda x: re.match(email_regex, x), emails)
+    
+    # convert valid emails to a list
+    email_list = list(valid_emails)
+    email_list.append(primary_email)
+    
+    return email_list
+
 
 @login_required()
 def dashboard(request):
@@ -326,22 +343,7 @@ def activities(request):
     }
     return render(request, 'subisu/activities.html', context)
 
-def process_emails(primary_email, other_emails):
-    # split string by comma or space
-    emails = re.split(r',|\s', other_emails)
-    
-    # filter out any empty strings
-    emails = filter(lambda x: x != '', emails)
-    
-    # validate each email using regex
-    email_regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-    valid_emails = filter(lambda x: re.match(email_regex, x), emails)
-    
-    # convert valid emails to a list
-    email_list = list(valid_emails)
-    email_list.append(primary_email)
-    
-    return email_list
+
 
 @login_required()
 def create_acitivities(request):
@@ -360,7 +362,7 @@ def create_acitivities(request):
                 return render(request, 'subisu/addactivities.html', context)
             
 
-            time = f"{start_time} - {end_time}"
+            # time = f"{start_time} - {end_time}"
             if end_time < start_time:
                 messages.warning(request, "End time cannot be earlier than start time")
                 context['form'] = form
@@ -382,15 +384,15 @@ def create_acitivities(request):
             if 'send_email' in form.cleaned_data and form.cleaned_data['send_email']:
                 title = form.cleaned_data['title']
                 location = form.cleaned_data['location']
+                eta = form.cleaned_data['ETA']
                 reason = form.cleaned_data['reason']
-                benefits = form.cleaned_data['benefits']
                 impact = form.cleaned_data['impact']
                 primary_email = form.cleaned_data['contact']
                 other_emails = form.cleaned_data['otherEmails']
                 email_list = process_emails(primary_email, other_emails)
-                EmailNotification.objects.create(activityId=activity, emailBody="\n".join([title, location, benefits, reason, impact]))
+               
                 
-                msg = send_department_mail(title, time, location, reason, benefits, impact, email_list)
+                msg = send_department_mail(title, eta, location, reason, impact, email_list)
                 if msg:
                     messages.info(request, "Mail sent successfully")
                 else:
@@ -470,7 +472,7 @@ def edit_activities(request, id):
                 title = form.cleaned_data['title']
                 location = form.cleaned_data['location']
                 reason = form.cleaned_data['reason']
-                benefits = form.cleaned_data['benefits']
+                eta = form.cleaned_data['ETA']
                 impact = form.cleaned_data['impact']
                 primary_email = form.cleaned_data['contact']
                 # retrieve otherEmails value from cleaned_data
@@ -482,8 +484,8 @@ def edit_activities(request, id):
                 
                 email_list = process_emails(primary_email, other_emails)
                 
-                EmailNotification.objects.create(activityId = activity, emailBody = " \n".join([title, location, benefits, reason, impact]))
-                msg = send_department_mail(title,time, location, reason, benefits, impact, email_list)
+                
+                msg = send_department_mail(title, eta, location, reason, impact, email_list)
                 if msg:
                     messages.info(request, "Mail sent successfully")
                 else:
@@ -634,13 +636,6 @@ def host_application_services(request, id):
 
 @login_required()
 def poa(request):
-    
-    # activityId = models.ForeignKey(Activities, on_delete=models.CASCADE, verbose_name="Select Activity")
-    # fieldEngineer = models.ManyToManyField(Staffs, blank=True, verbose_name="Select Field Engineers")
-    # poaDetails = models.TextField(max_length=250, verbose_name="POA Details")
-    # poaEntry = models.TimeField(auto_now_add=True, verbose_name="POA Entry")
-    # sendEmail = models.BooleanField(default=True)
-    # units = models.ManyToManyField(Units, blank=True, verbose_name="Send emails to Units")
     
     poa = Poa.objects.all()
     context = {

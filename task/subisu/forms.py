@@ -24,7 +24,6 @@ class ActivitiesForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
             'location': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
             'reason': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
-            'benefits': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
             'impact': forms.Textarea(attrs={'class': 'input-group input-group-outline my-3 border rounded', 'rows': 3}),
             'contact': forms.Select(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
             'startTime': DateTimePickerInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
