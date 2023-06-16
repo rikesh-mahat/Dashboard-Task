@@ -32,6 +32,22 @@ from .forms import *
 from django.db.models import Q
 
 
+
+
+def get_logged_user_info(request):
+    if request.user.is_authenticated:
+        user = request.user
+        staff = Staffs.objects.get(user = user) # getting the user
+        unit = staff.unitId # getting the unit of staff
+        department = unit.departmentId # getting the department
+        
+        return [staff, unit, department]
+        
+        
+        
+        
+        
+
 def process_emails(primary_email, other_emails):
     # split string by comma or space
     emails = re.split(r',|\s', other_emails)
@@ -136,13 +152,8 @@ def dashboard(request):
     inactive_services = client_services.filter(serviceStatus=False).count()
     
     client_services_count = client_services.count()
-    print(inactive_services, active_services)
-    # more_info_dict = {
-    #     'Hosts' : host_counts,
-    #     'Applications' : application_counts,
-    #     'Client Services' : client_services_count
-        
-    # }
+
+   
     
     
   
@@ -220,9 +231,7 @@ def delete_host(request, id):
 
 
 
-from django.contrib.auth.models import User
 
-from django.contrib.auth.models import User
 
 def login_user(request):
     if request.method == "POST":
@@ -337,7 +346,8 @@ def edit_admin(request, id):
 
 @login_required()
 def activities(request):
-    activities = Activities.objects.all().order_by('-created')
+    unit = get_logged_user_info(request)[1]
+    activities = Activities.objects.filter(contact = unit).order_by('-created')
     context = {
         'activities' : activities
     }
@@ -564,6 +574,8 @@ def create_staff(request):
                 messages.warning(request, "Sorry, the email is already in use")
                 return redirect('add_staff') 
             new_staff_user = User.objects.create(username=username, email=username, is_superuser = True, is_staff = True)
+            new_staff_user.set_password('1234')
+            new_staff_user.save()
             instance = form.save(commit=False)
             instance.user = new_staff_user
             instance.save()
