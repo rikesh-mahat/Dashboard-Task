@@ -149,14 +149,3 @@ LOGIN_URL = '/login/'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 
-JAZZMIN_SETTINGS = {
-    "show_ui_builder" : True,
-}
-
-JAZZMIN_UI_TWEAKS = {
-   
-    "footer_small_text": True,
-
-    "footer_fixed": False,
-  
-}
