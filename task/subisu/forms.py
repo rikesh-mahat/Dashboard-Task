@@ -19,7 +19,7 @@ class DepartmentsForm(forms.ModelForm):
 class ActivitiesForm(forms.ModelForm):
     class Meta:
         model = Activities
-        fields = '__all__'
+        exclude = ['contact']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),
             'location': forms.TextInput(attrs={'class': 'input-group input-group-outline my-3 border rounded'}),

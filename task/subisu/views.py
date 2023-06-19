@@ -363,6 +363,7 @@ def create_acitivities(request):
         
         if form.is_valid():
             activity = form.save(commit=False)
+            
             start_time = form.cleaned_data['startTime']
             end_time = form.cleaned_data['endTime']
 
@@ -378,7 +379,7 @@ def create_acitivities(request):
                 context['form'] = form
                 return render(request, 'subisu/addactivities.html', context)
             
-            activity.save()
+            
             
             comment = form.cleaned_data['Comment']
 
@@ -388,6 +389,11 @@ def create_acitivities(request):
                 staff = request.user.staff
                 staff_name = staff.firstName + " " + staff.middleName + " " +  staff.lastName if staff.middleName else  staff.firstName + " " +  staff.lastName
             staff_name = request.user.username
+            
+            if staff_name is not None:
+                activity.contact = get_logged_user_info(request)[1]
+            
+            activity.save()
             ActivityTable.objects.create(actId=activity, comment=comment, commentBy=staff_name)
             
             
@@ -454,10 +460,10 @@ def edit_activities(request, id):
             if end_time != new_end_time and new_end_time is not None:
                 activity.endTime = new_end_time
             
-            activity.save()
+            
             
 
-            
+            activity.save()
             time = f"{activity.startTime} - {activity.endTime}"
             
             
@@ -475,7 +481,8 @@ def edit_activities(request, id):
                     staff_name = staff.firstName + " " + staff.middleName + " " + staff.lastName if staff.middleName else staff.firstName + " " + staff.lastName
                 except AttributeError:
                     staff_name = request.user.username
-
+                
+                
                 ActivityTable.objects.create(actId=activity, comment=comment, commentBy=staff_name)
             
             if form.cleaned_data['sendEmail']:

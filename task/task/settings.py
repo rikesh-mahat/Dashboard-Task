@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'Models',
     'fontawesomefree',
     'django_flatpickr',
-    'import_export'
+    'import_export',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -149,3 +150,8 @@ LOGIN_URL = '/login/'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 
+GRAPH_MODELS = {
+    'all_applications': False,
+    'included_apps': ['subisu', 'Models'],
+    'graph_models': True,
+}
