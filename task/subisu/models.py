@@ -11,8 +11,8 @@ from Models.staffs import Staffs
 from django.utils import timezone
 from django.core.validators import validate_email
 from datetime import timedelta
-
-
+from .emails import send_department_mail
+from .views import process_emails
 def validate_email_list(value):
     # validation multiple email list
     emails = value.split()
@@ -125,7 +125,13 @@ class Activities(models.Model):
             else:
                 days = duration.days if duration.days > 1 else 1
                 self.ETA = f"{days} day"
+                
+        if self.sendEmail:
+            email_list = process_emails(self.contact.email, self.otherEmails)
+            send_department_mail(self.title, self.ETA, self.location, self.reason, self.impact , self.contact)
+           
         super().save(*args, **kwargs)
+        
             
      
     
