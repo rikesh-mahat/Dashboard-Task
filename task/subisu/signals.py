@@ -8,9 +8,11 @@ from django.contrib import messages
 
 
 @receiver(post_save, sender=Activities)
-def create_email(sender, instance, created, **kwargs):
+def create_email_and_save_staff(sender, instance, created, **kwargs):
     if created and instance.sendEmail:
         EmailNotification.objects.create(activityId = instance, emailBody = "\n".join([instance.title, instance.location, instance.reason, instance.impact]))
+        
+
         
        
 

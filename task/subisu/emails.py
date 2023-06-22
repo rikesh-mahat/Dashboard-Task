@@ -3,14 +3,14 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
-
+# send department mail
 def send_department_mail(title, maintenance, location, reason, impact , contact):
     sender = settings.EMAIL_HOST_USER
     subject  = title
     receiver = contact
     
     
-    
+    # context to be sent along withe email
     context = {'title' : title, 'maintenance' : maintenance, 'location' : location, 'reason' : reason, 'impact' : impact}
     html_content = render_to_string('subisu/departmentmail.html', context)
     text_content = strip_tags(html_content)

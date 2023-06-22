@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.core.validators import validate_email
 from datetime import timedelta
 from .emails import send_department_mail
-from .views import process_emails
+
 def validate_email_list(value):
     # validation multiple email list
     emails = value.split()
@@ -99,7 +99,7 @@ ACTIVITY_STATUS = [
     
 class Activities(models.Model):
     title = models.CharField(max_length=200, verbose_name="Activity Title")
-    
+    empId = models. ForeignKey(Staffs, on_delete= models.CASCADE, null = True)
     location = models.CharField(max_length=200, null=True, blank=True)
     reason = models.TextField(verbose_name="Reasons", blank=True)
     impact = models.TextField(verbose_name="Impact", blank=True)
@@ -112,7 +112,7 @@ class Activities(models.Model):
     Comment= models.CharField(max_length=200, null=True)
     status= models.CharField(max_length=20,choices=ACTIVITY_STATUS, default= 'Open')
     sendEmail = models.BooleanField(verbose_name = "Send Email",default=False, help_text="Send Email Notification to Department")
-    ETA = models.CharField(max_length=200, null=True, blank=True, editable=False)
+    ETA = models.CharField(max_length=200, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.startTime and self.endTime:
@@ -127,9 +127,9 @@ class Activities(models.Model):
                 self.ETA = f"{days} day"
                 
         if self.sendEmail:
-            email_list = process_emails(self.contact.email, self.otherEmails)
             send_department_mail(self.title, self.ETA, self.location, self.reason, self.impact , self.contact)
-           
+      
+          
         super().save(*args, **kwargs)
         
             
